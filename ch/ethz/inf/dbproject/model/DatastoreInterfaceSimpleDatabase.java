@@ -22,14 +22,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		/**
 		 * TODO this method should return the case with the given id
 		 */
-		final Scan scan = new Scan("cases.txt", 
-			new String[] {
-				"id",
-				"name",
-				"field2",
-				"field3"
-			}
-		);
+		final Scan scan = new Scan("cases.txt");
 		
 		final Select<Integer> select = new Select<Integer>(scan, "id", id);
 		
@@ -49,6 +42,10 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			return null;
 			
 		}		
+	}
+	
+	public final Case getBaseById2(final int id){
+		return null;
 	}
 
 	@Override

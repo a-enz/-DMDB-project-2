@@ -1,6 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
-import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import ch.ethz.inf.dbproject.model.simpleDatabase.*;
 
 /**
  * Base class of all operators. An operator processes one tuple at a time. It
@@ -13,7 +13,6 @@ public abstract class Operator {
 	 * The current tuple.
 	 */
 	protected Tuple current;
-
 	/**
 	 * Moves forward to the next tuple. The next tuple can be retrieved by a
 	 * call to current(). If there is no more tuple, this method returns false.
@@ -27,5 +26,4 @@ public abstract class Operator {
 	public final Tuple current() {
 		return this.current;
 	}
-	
 }

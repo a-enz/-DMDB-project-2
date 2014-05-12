@@ -39,6 +39,13 @@ public final class Case {
 	 * "Generate Getters and Setters to auto-magically generate
 	 * the getters. 
 	 */
+	
+	@Override
+	public String toString(){
+		return name + "," + id + "," + field2 + "," + field3;
+	}
+	
+	
 	public String getName() {
 		return name;
 	}

@@ -20,11 +20,7 @@ public class Sort extends Operator implements Comparator<Tuple> {
 	private final ArrayList<Tuple> sortBuffer;
 	private int offset;
 	
-	public Sort(
-		final Operator op,
-		final String column,
-		final boolean ascending
-	) {
+	public Sort(final Operator op,final String column,final boolean ascending) {
 		this.op = op;
 		this.column = column;
 		this.ascending = ascending;
@@ -32,10 +28,7 @@ public class Sort extends Operator implements Comparator<Tuple> {
 	}
 	
 	@Override
-	public final int compare(
-		final Tuple l, 
-		final Tuple r
-	) {
+	public final int compare(final Tuple l, final Tuple r) {
 		
 		final int columnIndex = l.getSchema().getIndex(this.column);
 		

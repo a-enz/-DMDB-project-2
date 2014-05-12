@@ -49,7 +49,7 @@ public final class DatastoreInterfaceMySQL implements DatastoreInterface{
 	
 	@Override
 	public final List<Case> getAllCases() {
-
+		
 		/**
 		 * TODO this method should return all the cases in the database
 		 */

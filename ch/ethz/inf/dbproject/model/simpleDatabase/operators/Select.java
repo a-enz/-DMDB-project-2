@@ -2,7 +2,11 @@ package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
 import java.util.Comparator;
 
-import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import com.foundationdb.sql.StandardException;
+import com.foundationdb.sql.parser.Visitable;
+import com.foundationdb.sql.parser.Visitor;
+
+import ch.ethz.inf.dbproject.model.simpleDatabase.*;
 
 
 /**
@@ -40,20 +44,13 @@ public class Select<T> extends Operator {
 	 * @param column column name that gets compared
 	 * @param compareValue value that must be matched
 	 */
-	public Select(
-		final Operator op, 
-		final String column, 
-		final T compareValue
-	) {
+	public Select(final Operator op, final String column, final T compareValue) {
 		this.op = op;
 		this.column = column;
 		this.compareValue = compareValue;
 	}
 
-	private final boolean accept(
-		final Tuple tuple
-	) {
-
+	private final boolean accept(final Tuple tuple) {
 		final int columnIndex = tuple.getSchema().getIndex(this.column);
 		
 		if (tuple.get(columnIndex).equals(this.compareValue.toString())) {
@@ -76,16 +73,27 @@ public class Select<T> extends Operator {
 		}
 		
 		// b) if there is a next tuple, pull it
-		final Tuple t = this.op.current();
+		Tuple t = this.op.current();
 		
 		// c) check if this tuple matches our selection predicate
-		if (this.accept(t)) {
-			
+		if (this.accept(t)) {			
 			// It does
 			this.current = t;
 			return true;
 			
 		} else {
+			while(!this.accept(t)){
+				if(this.op.moveNext()){
+					t = this.op.current();
+				}
+				else{
+					return false;
+				}
+			}
+			if(this.accept(t)){
+				this.current = t;
+				return true;
+			}
 			// TODO: loop until we either find something that matches, 
 			// or this.op has no more tuples.
 			
@@ -95,4 +103,8 @@ public class Select<T> extends Operator {
 		return false;
 	}
 
+	public Visitable accept(Visitor v) throws StandardException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

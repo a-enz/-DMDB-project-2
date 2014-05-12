@@ -14,10 +14,7 @@ public class Tuple {
 	private final TupleSchema schema;
 	private final String[] values;
 
-	public Tuple(
-		final TupleSchema schema, 
-		final String[] values
-	) {
+	public Tuple(final TupleSchema schema, final String[] values) {
 		this.schema = schema;
 		this.values = values;
 	}

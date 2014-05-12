@@ -1,6 +1,8 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
+import java.util.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,18 +17,15 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
  * values of a tuple. The line a comma separated.
  */
 public class Scan extends Operator {
-
-	private final TupleSchema schema;
+	
 	private final BufferedReader reader;
-
+	private final TupleSchema schema;
+	
 	/**
 	 * Contructs a new scan operator.
 	 * @param fileName file to read tuples from
 	 */
-	public Scan(final String fileName, final String[] columnNames) {
-		// create schema
-		this.schema = new TupleSchema(columnNames);
-
+	public Scan(final String fileName) {
 		// read from file
 		BufferedReader reader = null;
 		try {
@@ -35,6 +34,16 @@ public class Scan extends Operator {
 			throw new RuntimeException("could not find file " + fileName);
 		}
 		this.reader = reader;
+		
+		// create schema
+		String[] columnNames;
+		try{
+			columnNames = reader.readLine().split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read: " + this.reader + 
+					". Error is " + e);
+		}
+		this.schema = new TupleSchema(columnNames);
 	}
 
 	/**
@@ -42,9 +51,16 @@ public class Scan extends Operator {
 	 * @param reader reader to read lines from
 	 * @param columns column names
 	 */
-	public Scan(final Reader reader, final String[] columnNames) {
+	public Scan(final Reader reader) {
 		this.reader = new BufferedReader(reader);
-		this.schema = new TupleSchema(columnNames);
+		
+		String[] columnName;
+		try{
+			columnName = this.reader.readLine().split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read: " + this.reader + ". Error is " + e);
+		}
+		this.schema = new TupleSchema(columnName);
 	}
 
 	@Override
@@ -52,8 +68,8 @@ public class Scan extends Operator {
 		
 		try {
 			String read = reader.readLine();
-			if (read != null){
-				this.current = new Tuple(this.schema, new String[] {read});
+			if (read != null){				
+				this.current = new Tuple(this.schema, read.split(","));
 				return true;
 			}
 			return false;
@@ -64,8 +80,7 @@ public class Scan extends Operator {
 			//   b1. if we reached end of the file, close the buffered reader
 			// c) split up comma separated values
 			// d) create new tuple using schema and values
-		} catch (final IOException e) {
-			
+		} catch (final IOException e) {			
 			throw new RuntimeException("could not read: " + this.reader + 
 				". Error is " + e);
 		}		
