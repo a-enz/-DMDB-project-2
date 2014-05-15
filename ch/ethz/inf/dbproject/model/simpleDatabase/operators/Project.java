@@ -14,7 +14,8 @@ public final class Project extends Operator {
 	private final Operator op;
 	private final String[] columns;
 	private TupleSchema opSchema;
-	private final TupleSchema schema;
+	private TupleSchema schema;
+	private boolean first;
 
 	/**
 	 * Constructs a new projection operator.
@@ -34,7 +35,7 @@ public final class Project extends Operator {
 	public Project(final Operator op, final String[] columns) {
 		this.op = op;
 		this.columns = columns;
-		this.schema = new TupleSchema(columns);
+		this.first = true;
 	}
 
 	@Override
@@ -45,8 +46,22 @@ public final class Project extends Operator {
 		// return if we were able to advance to the next tuple
 		List<String> result = new ArrayList<String>();
 		
-		if (op.moveNext()){
+		if (first){
 			this.opSchema = op.current.getSchema();
+			
+			int[] columnsize = new int[columns.length];
+			
+			int index = 0;
+			for(String column:columns){
+				columnsize[index] = opSchema.getSize(column);
+			}
+
+			this.schema = new TupleSchema(columns, columnsize);
+			first = false;
+		}
+		
+		if (op.moveNext()){
+
 			for (String column:columns){
 				int index = opSchema.getIndex(column); 
 				if (index >= 0){
@@ -57,5 +72,10 @@ public final class Project extends Operator {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String getFileName() {
+		return op.getFileName();
 	}
 }

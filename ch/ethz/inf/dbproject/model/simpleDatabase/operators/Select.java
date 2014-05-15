@@ -103,8 +103,8 @@ public class Select<T> extends Operator {
 		return false;
 	}
 
-	public Visitable accept(Visitor v) throws StandardException {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public String getFileName() {
+		return op.getFileName();
 	}
 }

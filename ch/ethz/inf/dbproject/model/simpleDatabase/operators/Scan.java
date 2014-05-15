@@ -8,6 +8,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
+import com.foundationdb.sql.StandardException;
+import com.foundationdb.sql.parser.Visitable;
+import com.foundationdb.sql.parser.Visitor;
+
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
@@ -20,6 +24,7 @@ public class Scan extends Operator {
 	
 	private final BufferedReader reader;
 	private final TupleSchema schema;
+	private final String fileName;
 	
 	/**
 	 * Contructs a new scan operator.
@@ -34,16 +39,25 @@ public class Scan extends Operator {
 			throw new RuntimeException("could not find file " + fileName);
 		}
 		this.reader = reader;
+		this.fileName = fileName;
 		
 		// create schema
 		String[] columnNames;
 		try{
 			columnNames = reader.readLine().split(",");
 		} catch (final IOException e){
-			throw new RuntimeException("could not read: " + this.reader + 
+			throw new RuntimeException("could not read column name: " + this.reader + 
 					". Error is " + e);
 		}
-		this.schema = new TupleSchema(columnNames);
+		
+		String[] columnSize;
+		try{
+			columnSize = reader.readLine().split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read column size: " + this.reader + 
+					". Error is " + e);
+		}
+		this.schema = new TupleSchema(columnNames,columnSize);
 	}
 
 	/**
@@ -51,17 +65,17 @@ public class Scan extends Operator {
 	 * @param reader reader to read lines from
 	 * @param columns column names
 	 */
-	public Scan(final Reader reader) {
-		this.reader = new BufferedReader(reader);
-		
-		String[] columnName;
-		try{
-			columnName = this.reader.readLine().split(",");
-		} catch (final IOException e){
-			throw new RuntimeException("could not read: " + this.reader + ". Error is " + e);
-		}
-		this.schema = new TupleSchema(columnName);
-	}
+//	public Scan(final Reader reader) {
+//		this.reader = new BufferedReader(reader);
+//		
+//		String[] columnName;
+//		try{
+//			columnName = this.reader.readLine().split(",");
+//		} catch (final IOException e){
+//			throw new RuntimeException("could not read: " + this.reader + ". Error is " + e);
+//		}
+//		this.schema = new TupleSchema(columnName);
+//	}
 
 	@Override
 	public boolean moveNext() {
@@ -84,6 +98,17 @@ public class Scan extends Operator {
 			throw new RuntimeException("could not read: " + this.reader + 
 				". Error is " + e);
 		}		
+	}
+
+	@Override
+	public Visitable accept(Visitor v) throws StandardException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getFileName() {
+		return this.fileName;
 	}
 
 }

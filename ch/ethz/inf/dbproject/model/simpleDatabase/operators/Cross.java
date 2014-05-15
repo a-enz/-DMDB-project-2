@@ -110,4 +110,9 @@ public class Cross extends Operator {
 		}		
 	}
 
+	@Override
+	public String getFileName() {
+		return null;
+	}
+
 }

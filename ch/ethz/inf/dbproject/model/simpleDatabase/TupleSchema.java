@@ -10,15 +10,33 @@ import java.util.HashMap;
 public class TupleSchema {
 
 	private final String[] columnNames;
+	private int[] columnSize;
 	private final HashMap<String, Integer> columnNamesMap;
 	
 	/**
 	 * Constructs a new tuple schema.
 	 * @param columnNames column names
 	 */
-	public TupleSchema(
-		final String[] columnNames
-	) {
+	public TupleSchema(final String[] columnNames, final String[] columnSize) {
+		this.columnSize = new int[columnSize.length];
+		
+		int index = 0;
+		for(String size:columnSize){
+			this.columnSize[index] = Integer.parseInt(size);
+			index++;
+		}
+		
+		this.columnNames = columnNames;
+		
+		this.columnNamesMap = new HashMap<String, Integer>();
+		for (int i = 0; i < columnNames.length; ++i) {
+			this.columnNamesMap.put(this.columnNames[i].toUpperCase(), i);
+		}
+	}
+	
+	public TupleSchema(final String[] columnNames, final int[] columnSize) {
+		this.columnSize = columnSize;
+		
 		this.columnNames = columnNames;
 		
 		this.columnNamesMap = new HashMap<String, Integer>();
@@ -41,5 +59,12 @@ public class TupleSchema {
 			return index;
 		}	
 	}
+	
+	public int getSize(final String column) {
+		int index = this.getIndex(column);
+		return columnSize[index];
+	}
+	
+	
 	
 }

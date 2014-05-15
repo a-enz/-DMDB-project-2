@@ -75,5 +75,10 @@ public class Sort extends Operator implements Comparator<Tuple> {
 		return false;
 	}
 
+	@Override
+	public String getFileName() {
+		return op.getFileName();
+	}
+
 	
 }
