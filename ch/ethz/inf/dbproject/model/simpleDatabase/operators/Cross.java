@@ -1,6 +1,7 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
 import java.util.*;
+import java.lang.reflect.Array;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,11 +19,14 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
  */
 public class Cross extends Operator {
 
-	private final BufferedReader reader1;
-	private final BufferedReader reader2;	
+	private final Operator op1;
+	private final Operator op2;	
+	private final TupleSchema schema;
+	
 	private String read1;
 	private String read2;
-	final private TupleSchema schema;
+	
+	private boolean op1next;
 
 	/**
 	 * Contructs a new scan operator.
@@ -56,63 +60,62 @@ public class Cross extends Operator {
 	 */
 
 	
-	public Cross(final Reader reader1, final Reader reader2, int lengthReader2) {
-		this.reader1 = new BufferedReader(reader1);
-		this.reader2 = new BufferedReader(reader2);
+	public Cross(final Operator op1, final Operator op2) {
+		this.op1 = op1;
+		this.op2 = op2;
 		
-		String columnName1;
-		String columnName2;
-		try{
-			columnName1 = this.reader1.readLine();
-		} catch (final IOException e){
-			throw new RuntimeException("could not read: " + this.reader1 + ". Error is " + e);
-		}
+		TupleSchema tuple1 = this.op1.getSchema();
+		TupleSchema tuple2 = this.op2.getSchema();
+		
+		String[] columnNames = concat(tuple1.getAllNames(), tuple2.getAllNames());
+		Integer[] columnSizes = concat(tuple1.getAllSize(), tuple2.getAllSize());
 
-		try{
-			columnName2 = this.reader2.readLine();
-			this.reader2.mark(lengthReader2);
-		} catch (final IOException e){
-			throw new RuntimeException("could not read: " + this.reader2 + ". Error is " + e);
-		}
 		
-		String columnName12 = columnName1+","+columnName2;
-		this.schema = new TupleSchema(columnName12.split(","));
+		this.schema = new TupleSchema(columnNames, columnSizes);
+		
+		op1next = op1.moveNext();
 	}
+	
+	
+	public static <T> T[] concat (T[] array1, T[] array2) {
+		   int length1 = array1.length;
+		   int length2 = array2.length;
+		   
+		   @SuppressWarnings("unchecked")
+		   T[] ret = (T[]) Array.newInstance(array1.getClass().getComponentType(), length1 + length2); 
+		   System.arraycopy(array1, 0, ret, 0, length1);
+		   System.arraycopy(array2, 0, ret, length1, length2);
+		   return ret;
+		}
 
 	@Override
-	public boolean moveNext() {
-		
-		try {
-			if (read1 == null){
-				read1 = this.reader1.readLine();
+	public boolean moveNext() throws IOException {
+		if(op2.moveNext()){
+			
+		}
+		else{
+			if(op1.moveNext()){
+				op2.reset();
+				op2.moveNext();
 			}
-			
-			read2 = this.reader2.readLine();
-
-			if (read2 == null){
-				reader2.reset();
-				
-				read1 = this.reader1.readLine();
-				read2 = this.reader2.readLine();
-				
-				if (read1 == null){
-					return false;
-				}
-			}	
-			
-			String result = read1 + "," + read2;
-			this.current = new Tuple(this.schema,result.split(","));
-			return true;
-
-		} catch (final IOException e) {			
-			throw new RuntimeException("could not read: " + this.reader1 + 
-				". Error is " + e);
-		}		
+		}
+		return false;
 	}
 
 	@Override
 	public String getFileName() {
 		return null;
+	}
+
+	@Override
+	public void reset() throws IOException {
+		op1.reset();
+		op2.reset();
+	}
+
+	@Override
+	public TupleSchema getSchema() {
+		return schema;
 	}
 
 }

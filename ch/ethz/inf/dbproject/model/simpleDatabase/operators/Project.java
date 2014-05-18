@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
+import java.io.IOException;
 import java.util.*;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
@@ -46,21 +47,21 @@ public final class Project extends Operator {
 		// return if we were able to advance to the next tuple
 		List<String> result = new ArrayList<String>();
 		
-		if (first){
-			this.opSchema = op.current.getSchema();
-			
-			int[] columnsize = new int[columns.length];
-			
-			int index = 0;
-			for(String column:columns){
-				columnsize[index] = opSchema.getSize(column);
-			}
-
-			this.schema = new TupleSchema(columns, columnsize);
-			first = false;
-		}
-		
 		if (op.moveNext()){
+
+			if (first){
+				this.opSchema = op.current.getSchema();
+				
+				int[] columnsize = new int[columns.length];
+				
+				int index = 0;
+				for(String column:columns){
+					columnsize[index] = opSchema.getSize(column);
+				}
+
+				this.schema = new TupleSchema(columns, columnsize);
+				first = false;
+			}
 
 			for (String column:columns){
 				int index = opSchema.getIndex(column); 
@@ -77,5 +78,10 @@ public final class Project extends Operator {
 	@Override
 	public String getFileName() {
 		return op.getFileName();
+	}
+
+	@Override
+	public void reset() throws IOException {
+		op.reset();
 	}
 }

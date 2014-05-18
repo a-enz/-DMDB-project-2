@@ -1,12 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
-import java.util.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.Visitable;
@@ -22,29 +16,34 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
  */
 public class Scan extends Operator {
 	
-	private final BufferedReader reader;
+	private final RandomAccessFile reader;
 	private final TupleSchema schema;
 	private final String fileName;
+	private byte[] buffer;
+	
+	private int blocksize = 1024;
 	
 	/**
 	 * Contructs a new scan operator.
 	 * @param fileName file to read tuples from
+	 * @throws IOException 
 	 */
-	public Scan(final String fileName) {
+	public Scan(final String fileName) throws IOException {
 		// read from file
-		BufferedReader reader = null;
+		RandomAccessFile reader = null;
 		try {
-			reader = new BufferedReader(new FileReader(fileName));
+			reader = new RandomAccessFile (fileName, "rw");
 		} catch (final FileNotFoundException e) {
 			throw new RuntimeException("could not find file " + fileName);
 		}
 		this.reader = reader;
 		this.fileName = fileName;
-		
+		this.buffer = new byte[blocksize];
 		// create schema
 		String[] columnNames;
 		try{
-			columnNames = reader.readLine().split(",");
+			reader.read(buffer);
+			columnNames = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column name: " + this.reader + 
 					". Error is " + e);
@@ -52,13 +51,33 @@ public class Scan extends Operator {
 		
 		String[] columnSize;
 		try{
-			columnSize = reader.readLine().split(",");
+			reader.read(buffer);
+			columnSize = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column size: " + this.reader + 
 					". Error is " + e);
 		}
+		
+//		for(String name:columnNames){
+//			System.out.println("columnName " + name);
+//		}
+//		for(String size:columnSize){
+//			System.out.println("columnSize " + size);
+//		}
 		this.schema = new TupleSchema(columnNames,columnSize);
 	}
+	
+	public static String parseLine(byte[] data) {
+	    StringBuilder cbuf = new StringBuilder();
+	    for (byte b : data) {
+	      if (!(b == 0x1b)) {
+	        cbuf.append((char) b);
+	      }else{
+	    	  break;
+	      }
+	    }
+	    return cbuf.toString();
+	  }
 
 	/**
 	 * Constructs a new scan operator (mainly for testing purposes).
@@ -81,9 +100,10 @@ public class Scan extends Operator {
 	public boolean moveNext() {
 		
 		try {
-			String read = reader.readLine();
-			if (read != null){				
-				this.current = new Tuple(this.schema, read.split(","));
+			if (reader.getFilePointer() + 1024 < reader.length()){
+				reader.read(buffer);
+				String[] schemaValue = parseBuffer(buffer);
+				this.current = new Tuple(this.schema, schemaValue);
 				return true;
 			}
 			return false;
@@ -99,6 +119,31 @@ public class Scan extends Operator {
 				". Error is " + e);
 		}		
 	}
+	
+	public String[] parseBuffer(byte[] buffer){
+		int length = this.schema.getAllSize().length;
+		String[] ret = new String[length];
+		StringBuilder cbuf = new StringBuilder();
+		int offset = 0;
+		
+		for(int i=0; i<length;i++){
+			int j=0;
+			int bound = schema.getSize(i);
+			while(j<bound){
+				byte b = buffer[offset+j];
+				if (!(b == 0x1b)) {
+			        cbuf.append((char) b);
+			      }else{
+			    	  ret[i] = cbuf.toString();
+			    	  cbuf.delete(0, cbuf.length());
+			    	  break;
+			      }
+				j++;
+			}
+			offset += bound;
+		}
+		return ret;
+	}
 
 	@Override
 	public Visitable accept(Visitor v) throws StandardException {
@@ -109,6 +154,16 @@ public class Scan extends Operator {
 	@Override
 	public String getFileName() {
 		return this.fileName;
+	}
+
+	@Override
+	public void reset() throws IOException {
+		reader.seek(blocksize);
+	}
+
+	@Override
+	public TupleSchema getSchema() {
+		return schema;
 	}
 
 }

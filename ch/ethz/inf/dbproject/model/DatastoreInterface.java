@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public interface DatastoreInterface {
 
-	public abstract Case getCaseById(final int id);
+	public abstract Case getCaseById(final int id) throws IOException;
 
 	public abstract List<Case> getAllCases();
 	

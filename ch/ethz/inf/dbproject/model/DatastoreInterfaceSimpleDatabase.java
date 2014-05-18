@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	 * @see ch.ethz.inf.dbproject.model.DatastoreInterface#getCaseById(int)
 	 */
 	@Override
-	public final Case getCaseById(final int id) {
+	public final Case getCaseById(final int id) throws IOException {
 	
 		/**
 		 * TODO this method should return the case with the given id

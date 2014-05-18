@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
+import java.io.IOException;
+
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
@@ -21,10 +23,13 @@ public abstract class Operator implements Visitable{
 	 * Moves forward to the next tuple. The next tuple can be retrieved by a
 	 * call to current(). If there is no more tuple, this method returns false.
 	 * @return true, if we advanced to next tuple
+	 * @throws IOException 
 	 */
-	public abstract boolean moveNext();
+	public abstract boolean moveNext() throws IOException;
 	
 	public abstract String getFileName();
+	
+	public abstract void reset() throws IOException;
 
 	/**
 	 * @return the current tuple

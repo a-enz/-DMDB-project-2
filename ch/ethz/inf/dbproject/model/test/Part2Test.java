@@ -2,6 +2,7 @@ package ch.ethz.inf.dbproject.model.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
@@ -26,84 +27,86 @@ import com.foundationdb.sql.parser.parseVisitor;
  */
 public class Part2Test {
 
-	private String Case = "id,name,status\n1,Stolen car,open\n2,Fiscal fraud,closed\n3,High speed,open";
+//	private String Case = "id,name,status\n1,Stolen car,open\n2,Fiscal fraud,closed\n3,High speed,open";
+	private String Case = "id,name,field2,field311,30,30,111Danielbli12Mathiasblo23Andible3";
 	private String Person = "firstname,surname\nDaniel,Yu\nAndi,Enz";
 	
 	
 	@Test
-	public void testScan() {
-		Operator op = new Scan(new StringReader(Case));
-		String expected = "1,Stolen car,open 2,Fiscal fraud,closed 3,High speed,open";
-		String actual = concatTuples(op);
+	public void testScan() throws IOException {
+		//Operator op = new Scan(new StringReader(Case));
 		System.out.println("----------testScan--------");
+		Operator op = new Scan("cases.txt");
+		String expected = "1,Daniel,bli,1 2,Mathias,blo,2 3,Andi,ble,3";
+		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testSelect() {
-		Operator op = new Select<String>(new Scan(new StringReader(Case)), "status", "closed");
-		String expected = "2,Fiscal fraud,closed";
-		String actual = concatTuples(op);
+	public void testSelect() throws IOException {
 		System.out.println("----------testSelect--------");
+		Operator op = new Select<String>(new Scan("cases.txt"), "name", "Daniel");
+		String expected = "1,Daniel,bli,1";
+		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testProjectByName() {
-		Operator op = new Project(new Scan(new StringReader(Case)), "name");
-		String expected = "Stolen car Fiscal fraud High speed";
-		String actual = concatTuples(op);
+	public void testProjectByName() throws IOException {
 		System.out.println("----------testProjectByName--------");
+		Operator op = new Project(new Scan("cases.txt"), "name");
+		String expected = "Daniel Mathias Andi";
+		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testProjectByIdStatus() {
-		String[] columns = new String[] { "status", "id" };
-		Operator op = new Project(new Scan(new StringReader(Case)), columns);
-		String expected = "open,1 closed,2 open,3";
-		String actual = concatTuples(op);
+	public void testProjectByIdStatus() throws IOException {
 		System.out.println("----------testProjectByIdStatus--------");
+		String[] columns = new String[] { "name", "field3" };
+		Operator op = new Project(new Scan("cases.txt"), columns);
+		String expected = "Daniel,1 Mathias,2 Andi,3";
+		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testSelectProject() {
-		Operator op = new Project(new Select<String>(new Scan(new StringReader(Case)), "status", "closed"), "name");
-		String expected = "Fiscal fraud";
-		String actual = concatTuples(op);
+	public void testSelectProject() throws IOException {
 		System.out.println("----------testSelectProject--------");
+		Operator op = new Project(new Select<String>(new Scan("cases.txt"), "name", "Daniel"), "name");
+		String expected = "Daniel";
+		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
 		assertEquals(expected, actual);
 	}
 	
 	@Test
-	public void testCross(){
-		Operator op = new Cross(new StringReader(Case), new StringReader(Person), Person.length());
+	public void testCross() throws IOException{
+		System.out.println("----------testCross--------");
+		Operator op = new Cross(new Scan("cases.txt"), new Scan("cases.txt"));
 		String expected="1,Stolen car,open,Daniel,Yu 1,Stolen car,open,Andi,Enz 2,Fiscal fraud,closed,Daniel,Yu 2,Fiscal fraud,closed,Andi,Enz 3,High speed,open,Daniel,Yu 3,High speed,open,Andi,Enz";
 		String actual = concatTuples(op);
-		System.out.println("----------testCross--------");
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
 		assertEquals(expected,actual);
 	}
 	
 	@Test
-	public void testGetCaseById(){
+	public void testGetCaseById() throws IOException{
+		System.out.println("----------testGetCaseById--------");
 		DatastoreInterface dbInterface = new DatastoreInterfaceSimpleDatabase();
 		Case ca = dbInterface.getCaseById(2);
 		String expected = "Mathias,2,blo,2";
 		String actual = ca.toString();
-		System.out.println("----------testGetCaseById--------");
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
 		assertEquals(expected,actual);
@@ -139,7 +142,7 @@ public class Part2Test {
 		System.out.println("------------testSQLStatement-----------");
 		SQLParser parser = new SQLParser();
 		StatementNode stmt = parser.parseStatement("SELECT * FROM Cases WHERE PID = 13");
-		stmt.accept(new parseVisitor());
+		//stmt.accept(new parseVisitor());
 		//stmt.treePrint();
 	}
 

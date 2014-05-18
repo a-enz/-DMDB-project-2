@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -10,7 +11,7 @@ import java.util.HashMap;
 public class TupleSchema {
 
 	private final String[] columnNames;
-	private int[] columnSize;
+	private Integer[] columnSize;
 	private final HashMap<String, Integer> columnNamesMap;
 	
 	/**
@@ -18,7 +19,7 @@ public class TupleSchema {
 	 * @param columnNames column names
 	 */
 	public TupleSchema(final String[] columnNames, final String[] columnSize) {
-		this.columnSize = new int[columnSize.length];
+		this.columnSize = new Integer[columnSize.length];
 		
 		int index = 0;
 		for(String size:columnSize){
@@ -34,7 +35,7 @@ public class TupleSchema {
 		}
 	}
 	
-	public TupleSchema(final String[] columnNames, final int[] columnSize) {
+	public TupleSchema(final String[] columnNames, final Integer[] columnSize) {
 		this.columnSize = columnSize;
 		
 		this.columnNames = columnNames;
@@ -65,6 +66,16 @@ public class TupleSchema {
 		return columnSize[index];
 	}
 	
+	public int getSize(final int index){
+		return columnSize[index];
+	}
 	
+	public Integer[] getAllSize(){
+		return columnSize;
+	}
+	
+	public String[] getAllNames(){
+		return columnNames;
+	}
 	
 }

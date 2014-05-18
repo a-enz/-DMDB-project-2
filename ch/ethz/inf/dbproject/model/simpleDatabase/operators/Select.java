@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
+import java.io.IOException;
 import java.util.Comparator;
 
 import com.foundationdb.sql.StandardException;
@@ -62,7 +63,7 @@ public class Select<T> extends Operator {
 	}
 	
 	@Override
-	public boolean moveNext() {
+	public boolean moveNext() throws IOException {
 		
 		// TODO the contents of this method are just to give you an idea of
 		// how it should look like. 
@@ -107,4 +108,11 @@ public class Select<T> extends Operator {
 	public String getFileName() {
 		return op.getFileName();
 	}
+
+	@Override
+	public void reset() throws IOException {
+		op.reset();
+		
+	}
+
 }
