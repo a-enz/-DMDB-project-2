@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
+import java.io.IOException;
 import java.util.Comparator;
 
 import com.foundationdb.sql.StandardException;
@@ -106,5 +107,16 @@ public class Select<T> extends Operator {
 	@Override
 	public String getFileName() {
 		return op.getFileName();
+	}
+	
+	public Visitable accept(Visitor v) throws StandardException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void reset() throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 }

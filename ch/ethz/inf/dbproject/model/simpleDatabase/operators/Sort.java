@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -80,5 +81,10 @@ public class Sort extends Operator implements Comparator<Tuple> {
 		return op.getFileName();
 	}
 
+	@Override
+	public void reset() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

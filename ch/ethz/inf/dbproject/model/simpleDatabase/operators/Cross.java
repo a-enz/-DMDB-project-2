@@ -115,4 +115,9 @@ public class Cross extends Operator {
 		return null;
 	}
 
+	@Override
+	public void reset() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 }

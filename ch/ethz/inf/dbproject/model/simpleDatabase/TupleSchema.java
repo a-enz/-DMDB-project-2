@@ -38,7 +38,6 @@ public class TupleSchema {
 	
 	public TupleSchema(final String[] columnNames, final int[] columnSize) {
 		this.columnSize = columnSize;
-		
 		this.columnNames = columnNames;
 		
 		this.columnNamesMap = new HashMap<String, Integer>();
@@ -61,12 +60,9 @@ public class TupleSchema {
 			return index;
 		}	
 	}
-	
+
 	public int getSize(final String column) {
 		int index = this.getIndex(column);
 		return columnSize[index];
 	}
-	
-	
-	
 }

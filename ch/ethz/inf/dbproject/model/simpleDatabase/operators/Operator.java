@@ -15,6 +15,7 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.*;
  */
 public abstract class Operator implements Visitable{
 
+
 	/**
 	 * The current tuple.
 	 */
@@ -41,4 +42,5 @@ public abstract class Operator implements Visitable{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }
