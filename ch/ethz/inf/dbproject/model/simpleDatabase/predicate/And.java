@@ -1,6 +1,4 @@
-package mlei.operator;
-
-import java.util.ArrayList;
+package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
@@ -8,15 +6,17 @@ import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 
-public class Project extends Operator{
+public class And extends BinaryOp implements Predicate {
+	
+	
+	public And(Predicate left, Predicate right){
+		super.left = left;
+		super.right = right;
+	}
 
-	ArrayList<Tuple> from;
-	
-	
 	@Override
-	public boolean moveNext() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean evaluate(Tuple tuple) {
+		return left.evaluate(tuple) && right.evaluate(tuple);
 	}
 
 	@Override
@@ -24,5 +24,4 @@ public class Project extends Operator{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }

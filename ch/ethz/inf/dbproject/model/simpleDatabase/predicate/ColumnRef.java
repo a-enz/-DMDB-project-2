@@ -1,4 +1,4 @@
-package mlei.operator;
+package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 

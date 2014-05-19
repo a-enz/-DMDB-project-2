@@ -1,4 +1,6 @@
-package mlei.operator;
+package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
+
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Project;
 
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.AndNode;
@@ -8,7 +10,7 @@ import com.foundationdb.sql.parser.SelectNode;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 
-public class LeisVisitor implements Visitor{
+public class RelVisitor implements Visitor{
 	
 	private boolean showNodes = false;
 
