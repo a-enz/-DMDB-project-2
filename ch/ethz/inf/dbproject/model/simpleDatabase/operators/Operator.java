@@ -30,6 +30,8 @@ public abstract class Operator implements Visitable{
 	public abstract String getFileName();
 	
 	public abstract void reset() throws IOException;
+	
+	public abstract TupleSchema getSchema();
 
 	/**
 	 * @return the current tuple

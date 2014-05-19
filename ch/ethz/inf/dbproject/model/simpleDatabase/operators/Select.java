@@ -115,4 +115,9 @@ public class Select<T> extends Operator {
 		
 	}
 
+	@Override
+	public TupleSchema getSchema() {
+		return op.getSchema();
+	}
+
 }

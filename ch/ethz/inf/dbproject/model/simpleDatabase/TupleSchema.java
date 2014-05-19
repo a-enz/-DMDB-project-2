@@ -70,6 +70,16 @@ public class TupleSchema {
 		return columnSize[index];
 	}
 	
+	public int getType(final int index){
+		return 0;
+		//TODO: return typecode from hashmap
+	}
+	
+	public String getTableName(final int index){
+		return null;
+		//TODO: Return Table Name
+	}
+	
 	public Integer[] getAllSize(){
 		return columnSize;
 	}
@@ -78,4 +88,8 @@ public class TupleSchema {
 		return columnNames;
 	}
 	
+	public Integer[] getAllType(){
+		return null;
+		//TODO: return
+	}
 }
