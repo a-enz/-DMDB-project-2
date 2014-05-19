@@ -1,6 +1,5 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
-import java.io.IOException;
 import java.util.*;
 import java.io.*;
 
@@ -46,16 +45,14 @@ public final class Update extends Operator {
 	}
 
 	@Override
-	public boolean moveNext() throws IOException {
+	public boolean moveNext() {
 		boolean bool = op.moveNext();
 		this.current = op.current;
 		return bool;
 	}
 
-
 	@Override
 	public String getFileName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -63,11 +60,5 @@ public final class Update extends Operator {
 	public void reset() throws IOException {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public TupleSchema getSchema() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

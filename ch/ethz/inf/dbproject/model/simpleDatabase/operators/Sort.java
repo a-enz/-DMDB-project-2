@@ -1,11 +1,13 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
 /**
  * An empty sort operator
@@ -43,7 +45,7 @@ public class Sort extends Operator implements Comparator<Tuple> {
 	}
 
 	@Override
-	public boolean moveNext() {
+	public boolean moveNext() throws IOException {
 
 		// TODO 
 		
@@ -78,6 +80,18 @@ public class Sort extends Operator implements Comparator<Tuple> {
 	@Override
 	public String getFileName() {
 		return op.getFileName();
+	}
+
+	@Override
+	public void reset() throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public TupleSchema getSchema() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

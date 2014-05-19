@@ -15,6 +15,7 @@ public final class Project extends Operator {
 	private final Operator op;
 	private final String[] columns;
 	private TupleSchema opSchema;
+
 	private TupleSchema schema;
 	private boolean first;
 
@@ -36,11 +37,12 @@ public final class Project extends Operator {
 	public Project(final Operator op, final String[] columns) {
 		this.op = op;
 		this.columns = columns;
+
 		this.first = true;
 	}
 
 	@Override
-	public boolean moveNext() {
+	public boolean moveNext() throws IOException {
 		// TODO
 		// get next tuple from child operator
 		// create new tuple by copying the appropriate columns
@@ -52,7 +54,7 @@ public final class Project extends Operator {
 			if (first){
 				this.opSchema = op.current.getSchema();
 				
-				int[] columnsize = new int[columns.length];
+				Integer[] columnsize = new Integer[columns.length];
 				
 				int index = 0;
 				for(String column:columns){
@@ -83,5 +85,12 @@ public final class Project extends Operator {
 	@Override
 	public void reset() throws IOException {
 		op.reset();
+
+	}
+
+	@Override
+	public TupleSchema getSchema() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

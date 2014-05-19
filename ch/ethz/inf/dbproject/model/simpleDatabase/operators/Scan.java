@@ -6,6 +6,15 @@ import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 
+import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
+
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
@@ -22,6 +31,7 @@ public class Scan extends Operator {
 	private byte[] buffer;
 	
 	private int blocksize = 1024;
+
 	
 	/**
 	 * Contructs a new scan operator.
@@ -58,12 +68,7 @@ public class Scan extends Operator {
 					". Error is " + e);
 		}
 		
-//		for(String name:columnNames){
-//			System.out.println("columnName " + name);
-//		}
-//		for(String size:columnSize){
-//			System.out.println("columnSize " + size);
-//		}
+
 		this.schema = new TupleSchema(columnNames,columnSize);
 	}
 	
@@ -84,17 +89,7 @@ public class Scan extends Operator {
 	 * @param reader reader to read lines from
 	 * @param columns column names
 	 */
-//	public Scan(final Reader reader) {
-//		this.reader = new BufferedReader(reader);
-//		
-//		String[] columnName;
-//		try{
-//			columnName = this.reader.readLine().split(",");
-//		} catch (final IOException e){
-//			throw new RuntimeException("could not read: " + this.reader + ". Error is " + e);
-//		}
-//		this.schema = new TupleSchema(columnName);
-//	}
+
 
 	@Override
 	public boolean moveNext() {
@@ -119,7 +114,7 @@ public class Scan extends Operator {
 				". Error is " + e);
 		}		
 	}
-	
+
 	public String[] parseBuffer(byte[] buffer){
 		int length = this.schema.getAllSize().length;
 		String[] ret = new String[length];

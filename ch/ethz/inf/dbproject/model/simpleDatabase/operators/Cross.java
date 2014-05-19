@@ -57,10 +57,11 @@ public class Cross extends Operator {
 	 * Constructs a new scan operator (mainly for testing purposes).
 	 * @param reader reader to read lines from
 	 * @param columns column names
+	 * @throws IOException 
 	 */
 
 	
-	public Cross(final Operator op1, final Operator op2) {
+	public Cross(final Operator op1, final Operator op2) throws IOException {
 		this.op1 = op1;
 		this.op2 = op2;
 		
@@ -117,5 +118,4 @@ public class Cross extends Operator {
 	public TupleSchema getSchema() {
 		return schema;
 	}
-
 }

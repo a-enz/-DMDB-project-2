@@ -11,7 +11,9 @@ import java.util.HashMap;
 public class TupleSchema {
 
 	private final String[] columnNames;
+
 	private Integer[] columnSize;
+
 	private final HashMap<String, Integer> columnNamesMap;
 	
 	/**
@@ -19,10 +21,12 @@ public class TupleSchema {
 	 * @param columnNames column names
 	 */
 	public TupleSchema(final String[] columnNames, final String[] columnSize) {
+
 		this.columnSize = new Integer[columnSize.length];
 		
 		int index = 0;
 		for(String size:columnSize){
+
 			this.columnSize[index] = Integer.parseInt(size);
 			index++;
 		}
@@ -60,7 +64,7 @@ public class TupleSchema {
 			return index;
 		}	
 	}
-	
+
 	public int getSize(final String column) {
 		int index = this.getIndex(column);
 		return columnSize[index];
@@ -92,4 +96,5 @@ public class TupleSchema {
 		return null;
 		//TODO: return
 	}
+
 }

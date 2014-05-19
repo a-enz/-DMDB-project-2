@@ -120,4 +120,11 @@ public class Select<T> extends Operator {
 		return op.getSchema();
 	}
 
+
+	
+	public Visitable accept(Visitor v) throws StandardException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

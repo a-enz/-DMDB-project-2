@@ -14,7 +14,6 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.*;
  * moveNext() the application can retrieve the new tuple by a call to current().
  */
 public abstract class Operator implements Visitable{
-
 	/**
 	 * The current tuple.
 	 */
@@ -33,6 +32,7 @@ public abstract class Operator implements Visitable{
 	
 	public abstract TupleSchema getSchema();
 
+
 	/**
 	 * @return the current tuple
 	 */
@@ -44,4 +44,5 @@ public abstract class Operator implements Visitable{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }
