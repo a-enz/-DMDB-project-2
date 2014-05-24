@@ -27,4 +27,17 @@ public class ResultSet {
 	}
 	
 	//TODO: we might need more data type, such as date, float,...
+	
+	//TODO implement all of the below methods
+	public String getDate(final String column){ //return String or Date type?
+		return null;
+	}
+	
+	public void close(){
+		
+	}
+	
+	public boolean last(){
+		return false;
+	}
 }

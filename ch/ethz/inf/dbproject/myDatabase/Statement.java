@@ -63,4 +63,25 @@ public class Statement{
 		}
 		column.add(word);
 	}
+	
+	//TODO implement all of the below
+	public ResultSet executeUpdate(String statement){
+		return null;
+	}
+	
+	public void close(){
+		
+	}
+	
+	public boolean execute(String statement){
+		return false;
+	}
+	
+	public void addBatch(String statement){
+		
+	}
+	
+	public int[] executeBatch(){
+		return null;
+	}
 }
