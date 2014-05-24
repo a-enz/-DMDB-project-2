@@ -45,7 +45,7 @@ public final class GroupBy extends Operator {
 		List<String> result = new ArrayList<String>();
 		
 		if (op.moveNext()){
-
+			
 		}
 		return false;
 	}
