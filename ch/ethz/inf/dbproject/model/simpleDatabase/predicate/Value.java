@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Value implements Comparable<Value>{
+public class Value implements Comparable<Value>, Printable{
 	
 	public static final int STRING = 0;
 	public static final int INTEGER = 1;
@@ -109,5 +109,30 @@ public class Value implements Comparable<Value>{
 				break;
 		}
 		return result;
+	}
+
+	@Override
+	public void printTree(int depth) {
+		String val = "";
+		switch(type) {
+			case STRING:
+				val = s;
+				break;
+			case INTEGER:
+				val = Integer.toString(n);
+				break;
+			case FLOAT:
+				val = Float.toString(f);
+				break;
+			case DOUBLE:
+				val = Double.toString(d);
+				break;
+			case DATE:
+				val = da.toString();
+				break;
+			default:
+				break;
+		}
+		System.out.println(Helper.indent(depth) + "ValueNode: " + val + ", Type: " + type);
 	}
 }

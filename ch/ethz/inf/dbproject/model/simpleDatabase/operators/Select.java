@@ -8,6 +8,7 @@ import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Helper;
 import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Predicate;
 
 
@@ -34,39 +35,16 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Predicate;
  * 		usersScanOperator, "username", "john");
  * 
  */
-public class Select<T> extends Operator {
+public class Select extends Operator {
 
 	private final Operator op;
 	private String column;
-	private T compareValue;
 	private Predicate pred;
 
-	/**
-	 * Contructs a new selection operator.
-	 * @param op operator to pull from
-	 * @param column column name that gets compared
-	 * @param compareValue value that must be matched
-	 */
-	public Select(final Operator op, final String column, final T compareValue) {
-		this.op = op;
-		this.column = column;
-		this.compareValue = compareValue;
-	}
 	
 	public Select(final Operator op, final Predicate pred) {
 		this.op = op;
 		this.pred = pred;
-		
-	}
-
-	private final boolean accept(final Tuple tuple) {
-		final int columnIndex = tuple.getSchema().getIndex(this.column);
-		
-		if (tuple.get(columnIndex).equals(this.compareValue.toString())) {
-			return true;
-		} else {
-			return false;
-		}
 		
 	}
 	
@@ -85,13 +63,13 @@ public class Select<T> extends Operator {
 		Tuple t = this.op.current();
 		
 		// c) check if this tuple matches our selection predicate
-		if (this.accept(t)) {			
+		if (pred.evaluate(t)) {			
 			// It does
 			this.current = t;
 			return true;
 			
 		} else {
-			while(!this.accept(t)){
+			while(!pred.evaluate(t)){
 				if(this.op.moveNext()){
 					t = this.op.current();
 				}
@@ -99,7 +77,7 @@ public class Select<T> extends Operator {
 					return false;
 				}
 			}
-			if(this.accept(t)){
+			if(pred.evaluate(t)){
 				this.current = t;
 				return true;
 			}
@@ -138,6 +116,15 @@ public class Select<T> extends Operator {
 	@Override
 	public int getoffset() {
 		return op.getoffset();
+	}
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "SelectNode");
+		System.out.println(Helper.indent(depth) + "Predicate:");
+		pred.printTree(depth + 1);
+		System.out.println(Helper.indent(depth) + "Operator:");
+		op.printTree(depth + 1);
 	}
 
 }

@@ -18,13 +18,20 @@ public class Equals implements Predicate{
 
 	@Override
 	public Visitable accept(Visitor v) throws StandardException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean evaluate(Tuple tuple) {
-		// TODO Auto-generated method stub
 		return left.getValue(tuple) == right.getValue(tuple);
+	}
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "EqualsNode");
+		System.out.println(Helper.indent(depth) + "Left:");
+		left.printTree(depth + 1);
+		System.out.println(Helper.indent(depth) + "Right:");
+		right.printTree(depth + 1);
 	}
 }

@@ -17,6 +17,7 @@ import java.io.Reader;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Helper;
 
 
 /**
@@ -165,6 +166,12 @@ public class Scan extends Operator {
 	@Override
 	public int getoffset() {
 		return offset;
+	}
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "ScanNode: " + fileName);
+		
 	}
 
 }

@@ -2,7 +2,7 @@ package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
 import com.foundationdb.sql.parser.Visitable;
 
-public abstract class BinaryOp {
+public abstract class BinaryOp{
 	protected Predicate left;
 	protected Predicate right;
 	

@@ -39,6 +39,8 @@
 
 package com.foundationdb.sql.parser;
 
+import java.io.IOException;
+
 import com.foundationdb.sql.StandardException;
 
 /**

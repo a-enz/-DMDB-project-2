@@ -98,5 +98,11 @@ public class Sort extends Operator implements Comparator<Tuple> {
 		return op.getoffset();
 	}
 
+	@Override
+	public void printTree(int depth) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }
