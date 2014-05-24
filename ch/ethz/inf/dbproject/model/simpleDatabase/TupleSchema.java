@@ -9,44 +9,27 @@ import java.util.HashMap;
  * specified here.
  */
 public class TupleSchema {
-
-	private final String[] columnNames;
-
-	private Integer[] columnSize;
-
-	private final HashMap<String, Integer> columnNamesMap;
+	private final ColumnInfo[] columnInfos;
 	
 	/**
 	 * Constructs a new tuple schema.
 	 * @param columnNames column names
 	 */
-	public TupleSchema(final String[] columnNames, final String[] columnSize) {
-
-		this.columnSize = new Integer[columnSize.length];
+	public TupleSchema(final String[] columnNames, final String[] columnSize, final String[] columnTables) {
 		
-		int index = 0;
-		for(String size:columnSize){
-
-			this.columnSize[index] = Integer.parseInt(size);
-			index++;
-		}
+		columnInfos = new ColumnInfo[columnNames.length];
 		
-		this.columnNames = columnNames;
-		
-		this.columnNamesMap = new HashMap<String, Integer>();
-		for (int i = 0; i < columnNames.length; ++i) {
-			this.columnNamesMap.put(this.columnNames[i].toUpperCase(), i);
+		for (int i = 0; i < columnNames.length; i++){
+			columnInfos[i] = new ColumnInfo(columnTables[i], columnNames[i], Integer.parseInt(columnSize[i]));
 		}
 	}
 	
-	public TupleSchema(final String[] columnNames, final Integer[] columnSize) {
-		this.columnSize = columnSize;
+	public TupleSchema(final String[] columnNames, final int[] columnSize, final String[] columnTables) {
 		
-		this.columnNames = columnNames;
+		columnInfos = new ColumnInfo[columnNames.length];
 		
-		this.columnNamesMap = new HashMap<String, Integer>();
-		for (int i = 0; i < columnNames.length; ++i) {
-			this.columnNamesMap.put(this.columnNames[i].toUpperCase(), i);
+		for (int i = 0; i < columnNames.length; i++){
+			columnInfos[i] = new ColumnInfo(columnTables[i], columnNames[i], columnSize[i]);
 		}
 	}
 
@@ -57,7 +40,7 @@ public class TupleSchema {
 	 * @return index of column in tuple
 	 */
 	public int getIndex(final String column) {
-		final Integer index = this.columnNamesMap.get(column.toUpperCase());
+		final Integer index = 0; //TODO:
 		if (index == null) {
 			return -1; // error
 		} else {
@@ -67,38 +50,46 @@ public class TupleSchema {
 
 	public int getSize(final String column) {
 		int index = this.getIndex(column);
-		return columnSize[index];
+		return columnInfos[index].getSize();
 	}
 	
 	public int getSize(final int index){
-		return columnSize[index];
+		return columnInfos[index].getSize();
 	}
 	
-	public int getType(final int index){
-		return 0;
-		//TODO: return typecode from hashmap
-	}
 	
 	public String getTableName(final int index){
-		return null;
-		//TODO: Return Table Name
+		return columnInfos[index].getTableName();
 	}
 	
-	public Integer[] getAllSize(){
-		return columnSize;
+	public int[] getAllSize(){
+		int[] result = new int[columnInfos.length];
+		for(int i=0; i<columnInfos.length; i++){
+			result[i] = columnInfos[i].getSize();
+		}
+		return result;
 	}
 	
 	public String[] getAllNames(){
-		return columnNames;
+		String[] result = new String[columnInfos.length];
+		for(int i=0; i<columnInfos.length; i++){
+			result[i] = columnInfos[i].getColumnName();
+		}
+		return result;
 	}
 	
 	public int getOffset(String column){
 		int index = getIndex(column);
 		int offset = 0;
 		for (int i=0; i < index; i++){
-			offset += columnSize[i];
+			offset += columnInfos[i].getSize();
 		}
 		return offset;
+	}
+	
+	public int getType(final int index){
+		return 0;
+		//TODO: return typecode from hashmap
 	}
 	
 	public Integer[] getAllType(){
