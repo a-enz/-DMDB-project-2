@@ -1,5 +1,11 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
+import java.text.ParseException;
+
+import com.foundationdb.sql.StandardException;
+import com.foundationdb.sql.parser.Visitable;
+import com.foundationdb.sql.parser.Visitor;
+
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
 public class ColumnRef implements Extractor{
@@ -14,6 +20,17 @@ public class ColumnRef implements Extractor{
 	}
 	
 	public Value getValue(Tuple tuple) {
-		return new Value(column, type);
+		try {
+			return new Value(column, type);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public Visitable accept(Visitor v) throws StandardException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
