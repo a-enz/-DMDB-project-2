@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject.myDatabase;
 
+import java.io.IOException;
+
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
 
 public class ResultSet {
@@ -10,7 +12,7 @@ public class ResultSet {
 		this.op = op;
 	}
 	
-	public boolean next(){
+	public boolean next() throws IOException{
 		return op.moveNext();
 	}
 	
@@ -25,4 +27,17 @@ public class ResultSet {
 	}
 	
 	//TODO: we might need more data type, such as date, float,...
+	
+	//TODO implement all of the below methods
+	public String getDate(final String column){ //return String or Date type?
+		return null;
+	}
+	
+	public void close(){
+		
+	}
+	
+	public boolean last(){
+		return false;
+	}
 }
