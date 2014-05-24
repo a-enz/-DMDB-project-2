@@ -1,11 +1,17 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Project;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
 
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.AndNode;
 import com.foundationdb.sql.parser.BinaryRelationalOperatorNode;
 import com.foundationdb.sql.parser.CursorNode;
+import com.foundationdb.sql.parser.FromTable;
+import com.foundationdb.sql.parser.ResultColumn;
+import com.foundationdb.sql.parser.ResultColumnList;
 import com.foundationdb.sql.parser.SelectNode;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
@@ -28,10 +34,35 @@ public class RelVisitor implements Visitor{
 
 	@Override
 	public Visitable visit(SelectNode node) throws StandardException {
-		// TODO Auto-generated method stub
-		node.getFromList().accept(this);
-		node.getWhereClause().accept(this);
-		Project project = new Project(); 
+		
+		Iterator<FromTable> cursor = node.getFromList().iterator();
+		Iterator<ResultColumn> rCursor = node.getResultColumns().iterator();
+		FromTable current;
+		ArrayList<Scan>  scanList = new ArrayList<Scan>();
+		Iterator<Scan> sCursor;
+		Operator arg;
+		
+		while(cursor.hasNext()) {							//get all fromtables
+			current = cursor.next();
+			scanList.add(new Scan(current.getTableName().toString()));
+		}
+		
+		if(scanList.size() > 1) {							//cross that shit if more than one source
+			sCursor = scanList.iterator();
+			Cross cross = new Cross(sCursor.next(), sCursor.next());
+			while(sCursor.hasNext()) {
+				cross = new Cross(cross, sCursor.next());
+			}
+			arg = cross;
+		} else {
+			arg = scanList.get(0);
+		}
+		
+		
+		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
+		node.getResultColumns().accept(this);
+		Select select = new Select(arg, predicate);
+		Project project = new Project();
 		return null;
 	}
 	

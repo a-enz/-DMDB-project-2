@@ -2,7 +2,7 @@ package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
-public class ColumnRef {
+public class ColumnRef implements Extractor{
 	private String column;
 	private String table;
 	private int type;

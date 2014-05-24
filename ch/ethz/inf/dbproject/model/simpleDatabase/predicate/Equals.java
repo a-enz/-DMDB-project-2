@@ -8,8 +8,8 @@ import com.foundationdb.sql.parser.Visitor;
 
 public class Equals implements Predicate{
 	
-	Value left;
-	Value right;
+	Extractor left;
+	Extractor right;
 	
 	public Equals(){
 		

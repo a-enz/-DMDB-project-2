@@ -8,6 +8,7 @@ import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Predicate;
 
 
 /**
@@ -36,8 +37,9 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.*;
 public class Select<T> extends Operator {
 
 	private final Operator op;
-	private final String column;
-	private final T compareValue;
+	private String column;
+	private T compareValue;
+	private Predicate pred;
 
 	/**
 	 * Contructs a new selection operator.
@@ -49,6 +51,12 @@ public class Select<T> extends Operator {
 		this.op = op;
 		this.column = column;
 		this.compareValue = compareValue;
+	}
+	
+	public Select(final Operator op, final Predicate pred) {
+		this.op = op;
+		this.pred = pred;
+		
 	}
 
 	private final boolean accept(final Tuple tuple) {
