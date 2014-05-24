@@ -28,7 +28,7 @@ public class RelVisitor implements Visitor{
 
 	@Override
 	public Visitable visit(Visitable node) throws StandardException {
-		if(node instanceof CursorNode) ((CursorNode) node).accept(this);
+		if(node instanceof CursorNode) return ((CursorNode) node).accept(this);
 		System.out.println("NodeClass: " + node.getClass());
 		return null;
 	}
@@ -73,7 +73,7 @@ public class RelVisitor implements Visitor{
 		node.getResultColumns().accept(this);
 		Select select = new Select(arg, predicate);
 		//Project project = new Project();
-		return null;
+		return select;
 	}
 	
 	public Visitable visit(AndNode node) throws StandardException {
