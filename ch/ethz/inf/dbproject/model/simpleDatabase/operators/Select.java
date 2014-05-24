@@ -135,4 +135,9 @@ public class Select<T> extends Operator {
 		return null;
 	}
 
+	@Override
+	public int getoffset() {
+		return op.getoffset();
+	}
+
 }

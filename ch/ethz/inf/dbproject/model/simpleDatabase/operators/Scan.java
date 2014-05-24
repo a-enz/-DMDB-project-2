@@ -29,6 +29,7 @@ public class Scan extends Operator {
 	private final TupleSchema schema;
 	private final String fileName;
 	private byte[] buffer;
+	private int offset; // TODO: calculate offset and update !!!
 	
 	private int blocksize = 1024;
 
@@ -153,12 +154,17 @@ public class Scan extends Operator {
 
 	@Override
 	public void reset() throws IOException {
-		reader.seek(blocksize);
+		reader.seek(2*blocksize);
 	}
 
 	@Override
 	public TupleSchema getSchema() {
 		return schema;
+	}
+
+	@Override
+	public int getoffset() {
+		return offset;
 	}
 
 }

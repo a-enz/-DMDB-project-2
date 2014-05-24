@@ -88,7 +88,9 @@ public class Part2Test {
 	public void testCross() throws IOException{
 		System.out.println("----------testCross--------");
 		Operator op = new Cross(new Scan("cases.txt"), new Scan("cases.txt"));
-		String expected="1,Stolen car,open,Daniel,Yu 1,Stolen car,open,Andi,Enz 2,Fiscal fraud,closed,Daniel,Yu 2,Fiscal fraud,closed,Andi,Enz 3,High speed,open,Daniel,Yu 3,High speed,open,Andi,Enz";
+		String expected= 	"1,Daniel,bli,1,1,Daniel,bli,1 1,Daniel,bli,1,2,Mathias,blo,2 1,Daniel,bli,1,3,Andi,ble,3 " +
+							"2,Mathias,blo,2,1,Daniel,bli,1 2,Mathias,blo,2,2,Mathias,blo,2 2,Mathias,blo,2,3,Andi,ble,3 " +
+							"3,Andi,ble,3,1,Daniel,bli,1 3,Andi,ble,3,2,Mathias,blo,2 3,Andi,ble,3,3,Andi,ble,3";
 		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
@@ -137,7 +139,7 @@ public class Part2Test {
 		System.out.println("------------testSQLStatement-----------");
 		SQLParser parser = new SQLParser();
 		StatementNode stmt = parser.parseStatement("SELECT * FROM Cases WHERE PID = 13");
-		stmt.accept(new parseVisitor());
+		//stmt.accept(new parseVisitor());
 		//stmt.treePrint();
 	}
 

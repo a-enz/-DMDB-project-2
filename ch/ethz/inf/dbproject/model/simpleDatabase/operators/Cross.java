@@ -23,8 +23,8 @@ public class Cross extends Operator {
 	private final Operator op2;	
 	private final TupleSchema schema;
 	
-	private String read1;
-	private String read2;
+	private String read1[];
+	private String read2[];
 	
 	private boolean op1next;
 
@@ -61,7 +61,8 @@ public class Cross extends Operator {
 	 */
 
 	
-	public Cross(final Operator op1, final Operator op2) throws IOException {
+	public Cross(final Operator op1, final Operator op2) throws IOException
+	{
 		this.op1 = op1;
 		this.op2 = op2;
 		
@@ -91,16 +92,29 @@ public class Cross extends Operator {
 
 	@Override
 	public boolean moveNext() throws IOException {
+		if (op1.current == null && op1.moveNext() == false){
+			return false;
+		}
+		
 		if(op2.moveNext()){
-			
+			read1 = op1.current.getValue();
+			read2 = op2.current.getValue();
+			current = new Tuple(schema, concat(read1,read2));
+			return true;
 		}
 		else{
 			if(op1.moveNext()){
 				op2.reset();
-				op2.moveNext();
+				if(op2.moveNext()){
+					read1 = op1.current.getValue();
+					read2 = op2.current.getValue();
+					current = new Tuple(schema, concat(read1,read2));
+					return true;
+				}
 			}
 		}
 		return false;
+			
 	}
 
 	@Override
@@ -117,5 +131,11 @@ public class Cross extends Operator {
 	@Override
 	public TupleSchema getSchema() {
 		return schema;
+	}
+
+
+	@Override
+	public int getoffset() {
+		return 0;
 	}
 }

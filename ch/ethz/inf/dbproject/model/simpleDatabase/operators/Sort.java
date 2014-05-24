@@ -84,14 +84,18 @@ public class Sort extends Operator implements Comparator<Tuple> {
 
 	@Override
 	public void reset() throws IOException {
-		// TODO Auto-generated method stub
+		op.reset();
 		
 	}
 
 	@Override
 	public TupleSchema getSchema() {
-		// TODO Auto-generated method stub
-		return null;
+		return op.getSchema();
+	}
+
+	@Override
+	public int getoffset() {
+		return op.getoffset();
 	}
 
 	

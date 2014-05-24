@@ -92,6 +92,15 @@ public class TupleSchema {
 		return columnNames;
 	}
 	
+	public int getOffset(String column){
+		int index = getIndex(column);
+		int offset = 0;
+		for (int i=0; i < index; i++){
+			offset += columnSize[i];
+		}
+		return offset;
+	}
+	
 	public Integer[] getAllType(){
 		return null;
 		//TODO: return
