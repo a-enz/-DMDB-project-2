@@ -1,20 +1,28 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
 
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 
-public class Equals implements Predicate{
+public class NotIn implements Predicate{
 	
-	Extractor left;
-	Extractor right;
+	private ArrayList<Tuple> table;
+	private Operator op;
 	
-	public Equals(Extractor left, Extractor right){
-		this.left = left;
-		this.right = right;
+	public NotIn(Operator op) throws IOException {
+		table = new ArrayList<Tuple>();
+		this.op = op;
+		while(op.moveNext()) {
+			table.add(op.current());
+		}
 	}
+	
 
 	@Override
 	public Visitable accept(Visitor v) throws StandardException {
@@ -24,7 +32,7 @@ public class Equals implements Predicate{
 
 	@Override
 	public boolean evaluate(Tuple tuple) {
-		// TODO Auto-generated method stub
-		return left.getValue(tuple) == right.getValue(tuple);
+		return !table.contains(tuple);
 	}
+
 }
