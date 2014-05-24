@@ -47,6 +47,10 @@ public class Tuple {
 	// You may add other custom type getters here
 	// i.e. Date, Time
 	
+	public final String[] getValue(){
+		return values;
+	}
+	
 	public final String toString() {
 		final StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {

@@ -3,28 +3,24 @@ package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 import java.io.IOException;
 import java.util.*;
 
-import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
-import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import ch.ethz.inf.dbproject.model.simpleDatabase.*;
 
 /**
  * Projection in relational algebra. Returns tuples that contain on projected
  * columns. Therefore the new tuples conform to a new schema.
  */
-public final class Project extends Operator {
+public final class GroupBy extends Operator {
 
 	private final Operator op;
 	private final String[] columns;
-	private TupleSchema opSchema;
-
-	private TupleSchema schema;
-	private boolean first;
-
+	private final TupleSchema schema;
+	private HashMap<MultiKey, List<String>> map;
 	/**
 	 * Constructs a new projection operator.
 	 * @param op operator to pull from
 	 * @param column single column name that will be projected
 	 */
-	public Project(final Operator op, final String column)
+	public GroupBy(final Operator op, final String column)
 	{
 		this(op, new String[] { column });
 	}
@@ -34,11 +30,10 @@ public final class Project extends Operator {
 	 * @param op operator to pull from
 	 * @param columns column names that will be projected
 	 */
-	public Project(final Operator op, final String[] columns) {
+	public GroupBy(final Operator op, final String[] columns) {
 		this.op = op;
 		this.columns = columns;
-
-		this.first = true;
+		this.schema = op.getSchema();
 	}
 
 	@Override
@@ -51,28 +46,6 @@ public final class Project extends Operator {
 		
 		if (op.moveNext()){
 
-			if (first){
-				this.opSchema = op.current.getSchema();
-				
-				Integer[] columnsize = new Integer[columns.length];
-				
-				int index = 0;
-				for(String column:columns){
-					columnsize[index] = opSchema.getSize(column);
-				}
-
-				this.schema = new TupleSchema(columns, columnsize);
-				first = false;
-			}
-
-			for (String column:columns){
-				int index = opSchema.getIndex(column); 
-				if (index >= 0){
-					result.add(op.current.get(index));
-				}
-			}
-			current = new Tuple(this.schema, result.toArray(new String[result.size()]));
-			return true;
 		}
 		return false;
 	}

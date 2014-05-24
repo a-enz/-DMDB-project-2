@@ -18,6 +18,7 @@ public abstract class Operator implements Visitable{
 	 * The current tuple.
 	 */
 	protected Tuple current;
+	protected TupleSchema schema;
 	/**
 	 * Moves forward to the next tuple. The next tuple can be retrieved by a
 	 * call to current(). If there is no more tuple, this method returns false.
@@ -30,8 +31,11 @@ public abstract class Operator implements Visitable{
 	
 	public abstract void reset() throws IOException;
 	
-	public abstract TupleSchema getSchema();
+	public TupleSchema getSchema(){
+		return schema;
+	}
 
+	public abstract int getoffset();
 
 	/**
 	 * @return the current tuple

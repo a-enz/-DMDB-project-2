@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject.myDatabase;
 
+import java.io.IOException;
+
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
 
 public class ResultSet {
@@ -10,7 +12,7 @@ public class ResultSet {
 		this.op = op;
 	}
 	
-	public boolean next(){
+	public boolean next() throws IOException{
 		return op.moveNext();
 	}
 	
