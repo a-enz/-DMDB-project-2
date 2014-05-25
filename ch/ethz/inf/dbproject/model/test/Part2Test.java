@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
 import ch.ethz.inf.dbproject.model.*;
 import ch.ethz.inf.dbproject.myDatabase.*;
@@ -53,7 +54,7 @@ public class Part2Test {
 	@Test
 	public void testProjectByName() throws IOException {
 		System.out.println("----------testProjectByName--------");
-		Operator op = new Project(new Scan("cases.txt"), "name");
+		Operator op = new Project(new Scan("cases.txt"), "name", "cases");
 		String expected = "Daniel Mathias Andi";
 		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
@@ -65,7 +66,8 @@ public class Part2Test {
 	public void testProjectByIdStatus() throws IOException {
 		System.out.println("----------testProjectByIdStatus--------");
 		String[] columns = new String[] { "name", "field3" };
-		Operator op = new Project(new Scan("cases.txt"), columns);
+		String[] tables = new String[] { "cases", "cases"};
+		Operator op = new Project(new Scan("cases.txt"), columns, tables);
 		String expected = "Daniel,1 Mathias,2 Andi,3";
 		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
@@ -76,7 +78,7 @@ public class Part2Test {
 	@Test
 	public void testSelectProject() throws IOException {
 		System.out.println("----------testSelectProject--------");
-		Operator op = new Project(new Select<String>(new Scan("cases.txt"), "name", "Daniel"), "name");
+		Operator op = new Project(new Select<String>(new Scan("cases.txt"), "name", "Daniel"), "name", "cases");
 		String expected = "Daniel";
 		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
@@ -141,6 +143,15 @@ public class Part2Test {
 		StatementNode stmt = parser.parseStatement("SELECT * FROM Cases WHERE PID = 13");
 		//stmt.accept(new parseVisitor());
 		//stmt.treePrint();
+	}
+	
+	@Test
+	public void testMultiKey(){
+		System.out.println("-------------testMultiKey----------------");
+		String[] columns = new String[3]{bla,blab,bla};
+		Integer[] sizes;
+		String[] tables;
+		TupleSchema schema = new TupleSchema(columns, sizes, tables);
 	}
 
 	/**

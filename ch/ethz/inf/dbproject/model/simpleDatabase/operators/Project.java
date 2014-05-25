@@ -15,6 +15,7 @@ public final class Project extends Operator {
 
 	private final Operator op;
 	private final String[] columns;
+	private final String[] tables;
 	private TupleSchema opSchema;
 
 	private TupleSchema schema;
@@ -25,9 +26,9 @@ public final class Project extends Operator {
 	 * @param op operator to pull from
 	 * @param column single column name that will be projected
 	 */
-	public Project(final Operator op, final String column)
+	public Project(final Operator op, final String column, final String table)
 	{
-		this(op, new String[] { column });
+		this(op, new String[] { column }, new String[] { table });
 	}
 
 	/**
@@ -35,9 +36,10 @@ public final class Project extends Operator {
 	 * @param op operator to pull from
 	 * @param columns column names that will be projected
 	 */
-	public Project(final Operator op, final String[] columns) {
+	public Project(final Operator op, final String[] columns, final String[] tables) {
 		this.op = op;
 		this.columns = columns;
+		this.tables = tables;
 
 		this.first = true;
 	}
@@ -55,19 +57,20 @@ public final class Project extends Operator {
 			if (first){
 				this.opSchema = op.current.getSchema();
 				
-				Integer[] columnsize = new Integer[columns.length];
+				Integer[] columnSize = new Integer[columns.length];
+				String[] columnTable = new String[columns.length];
 				
-				int index = 0;
-				for(String column:columns){
-					columnsize[index] = opSchema.getSize(column);
+				for(int i = 0; i < columns.length; i++){
+					columnSize[i] = opSchema.getSize(columns[i], tables[i]);
+					columnTable[i] = opSchema.getTableName(columns[i], tables[i]);
 				}
 
-				this.schema = new TupleSchema(columns, columnsize);
+				this.schema = new TupleSchema(columns, columnSize, columnTable);
 				first = false;
 			}
 
-			for (String column:columns){
-				int index = opSchema.getIndex(column); 
+			for (int i = 0; i < columns.length; i++){
+				int index = opSchema.getIndex(columns[i], tables[i]); 
 				if (index >= 0){
 					result.add(op.current.get(index));
 				}

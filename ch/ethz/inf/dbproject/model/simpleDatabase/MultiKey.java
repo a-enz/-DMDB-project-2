@@ -10,6 +10,13 @@ public class MultiKey {
 	  keys = new ArrayList<String>();
   }
 
+  public MultiKey(String[] key){
+	  keys = new ArrayList<String>();
+	  for (String k:key){
+		  keys.add(k);
+	  }
+  }
+  
   public int hashcode() {
 	  StringBuilder string = new StringBuilder();
 	  for (String key:keys){
@@ -20,6 +27,10 @@ public class MultiKey {
   
   public List<String> getKeys(){
 	  return keys;
+  }
+  
+  public void setKey(String key){
+	  keys.add(key);
   }
   
   public boolean equals(Object other) {

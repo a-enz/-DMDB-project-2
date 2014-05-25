@@ -29,6 +29,7 @@ public class Scan extends Operator {
 	private final RandomAccessFile reader;
 	private final TupleSchema schema;
 	private final String fileName;
+	private final String tableName;
 	private byte[] buffer;
 	private int offset; // TODO: calculate offset and update !!!
 	
@@ -50,6 +51,7 @@ public class Scan extends Operator {
 		}
 		this.reader = reader;
 		this.fileName = fileName;
+		this.tableName = fileName.substring(0, fileName.indexOf("."));
 		this.buffer = new byte[blocksize];
 		// create schema
 		String[] columnNames;
@@ -70,8 +72,13 @@ public class Scan extends Operator {
 					". Error is " + e);
 		}
 		
+		String[] tableNames = new String[columnSize.length];
+		
+		for (int i = 0; i < tableNames.length; i++){
+			tableNames[i] = this.tableName;
+		}
 
-		this.schema = new TupleSchema(columnNames,columnSize);
+		this.schema = new TupleSchema (columnNames,columnSize, tableNames);
 	}
 	
 	public static String parseLine(byte[] data) {
