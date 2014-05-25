@@ -45,19 +45,20 @@ public class TupleSchema {
 	 * @return index of column in tuple
 	 */
 	
-//	public int isUnique(final String column){
-//		int amount = 0;
-//		int index = -1;
-//		String[] columnNames = this.getAllNames();
-//		for (int i=0; i<columnNames.length; i++){
-//			if (columnNames[i] == column){
-//				amount++;
-//			}
-//		}
-//		return (amount <= 1);
-//	}
-	
 	public int getIndex(final String column, final String table) {
+		int amount = 0;
+		int uniqueindex = -1;
+		String[] columnNames = this.getAllNames();
+		for (int i = 0; i < columnNames.length; i++){
+			if (columnNames[i].equals(column)){
+				amount++;
+				uniqueindex = i;
+			}
+		}
+		if (amount <= 1){
+			return uniqueindex;
+		}
+		
 		ColumnInfo key = new ColumnInfo(column, table);
 		final Integer index = map.get(key);
 		if (index == null) {
