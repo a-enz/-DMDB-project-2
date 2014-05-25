@@ -58,6 +58,7 @@ public class Scan extends Operator {
 		String[] columnNames;
 		try{
 			reader.read(buffer);
+			offset += blocksize;
 			columnNames = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column name: " + this.reader + 
@@ -67,6 +68,7 @@ public class Scan extends Operator {
 		String[] columnSize;
 		try{
 			reader.read(buffer);
+			offset += blocksize;
 			columnSize = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column size: " + this.reader + 
@@ -82,6 +84,7 @@ public class Scan extends Operator {
 		String[] columnType;
 		try{
 			reader.read(buffer);
+			offset += blocksize;
 			columnType = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column type: " + this.reader + 
@@ -116,6 +119,7 @@ public class Scan extends Operator {
 		try {
 			if (reader.getFilePointer() + 1024 < reader.length()){
 				reader.read(buffer);
+				offset += blocksize;
 				String[] schemaValue = parseBuffer(buffer);
 				this.current = new Tuple(this.schema, schemaValue);
 				return true;

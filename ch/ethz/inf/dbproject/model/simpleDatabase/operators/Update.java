@@ -57,8 +57,7 @@ public final class Update extends Operator {
 	
 	public void doUpdate() throws IOException{
 		while(moveNext()){
-			//TODO: get Offset
-			int offset = 0; //this has to be the offset
+			int offset = op.getoffset();
 			for (int i=0; i< columns.length; i++){
 				int columnoffset = schema.getOffset(columns[i], tables[i]);
 				reader.write(values[i].getBytes(), offset + columnoffset, schema.getSize(columns[i], tables[i]));
