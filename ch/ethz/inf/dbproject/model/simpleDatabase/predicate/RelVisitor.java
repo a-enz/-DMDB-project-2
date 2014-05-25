@@ -62,6 +62,7 @@ public class RelVisitor implements Visitor{
 		try {
 			while(cursor.hasNext()) {							//get all fromtables
 				current = cursor.next();
+				System.out.println(current.getOrigTableName().toString());
 				scanList.add(new Scan(current.getTableName().toString()));
 			}
 			
