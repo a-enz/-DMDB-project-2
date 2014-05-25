@@ -1,7 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 import ch.ethz.inf.dbproject.model.simpleDatabase.*;
 
 /**
@@ -45,6 +44,19 @@ public class TupleSchema {
 	 * @param column column name
 	 * @return index of column in tuple
 	 */
+	
+//	public int isUnique(final String column){
+//		int amount = 0;
+//		int index = -1;
+//		String[] columnNames = this.getAllNames();
+//		for (int i=0; i<columnNames.length; i++){
+//			if (columnNames[i] == column){
+//				amount++;
+//			}
+//		}
+//		return (amount <= 1);
+//	}
+	
 	public int getIndex(final String column, final String table) {
 		ColumnInfo key = new ColumnInfo(column, table);
 		final Integer index = map.get(key);
@@ -116,6 +128,16 @@ public class TupleSchema {
 			result[i] = columnInfos[i].getType();
 		}
 		return result;
+	}
+	
+	public String[] getAllColumnNamesByTable(final String table){
+		List<String> result = new ArrayList<String>();
+		for (ColumnInfo columninfo:columnInfos){
+			if (columninfo.getTableName() == table){
+				result.add(columninfo.getColumnName());
+			}
+		}
+		return result.toArray(new String[result.size()]);
 	}
 
 }
