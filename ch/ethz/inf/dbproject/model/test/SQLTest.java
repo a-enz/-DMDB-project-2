@@ -13,9 +13,9 @@ public class SQLTest {
 	private RelVisitor visitor;
 	private StatementNode node;
 	private Select select;
-	Visitable visit;
+	private Visitable visit;
 	//private String arg= "Select PersonID, FirstName, SurName, Street, BirthDate, Nationality, Bounty FROM Person WHERE PersonID=12";
-	private String arg="SELECT * FROM Connected co WHERE CaseID =11 AND PersonID = 9";
+	private String arg="SELECT * FROM Cases ca WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
 	
 	public SQLTest() throws StandardException {

@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.dummy.*;
 
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.AndNode;
@@ -62,6 +62,7 @@ public class RelVisitor implements Visitor{
 		try {
 			while(cursor.hasNext()) {							//get all fromtables
 				current = cursor.next();
+				System.out.println(current.getOrigTableName().toString());
 				scanList.add(new Scan(current.getTableName().toString()));
 			}
 			

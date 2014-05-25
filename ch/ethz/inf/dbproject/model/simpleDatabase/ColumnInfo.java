@@ -9,18 +9,19 @@ public class ColumnInfo {
 	/**
 	 * @param args
 	 */
+
 	public ColumnInfo(String columnName, String tableName, int size) {
 		this.tableName = tableName;
 		this.columnName = columnName;
 		this.size = size;
 	}
 	
+
 	public ColumnInfo(String columnName, String tableName) {
 		this.tableName = tableName;
 		this.columnName = columnName;
 		this.size = 0;
 	}
-	
 
 	public String getTableName(){
 		return tableName;
