@@ -155,8 +155,8 @@ public class Part2Test {
 		
 		TupleSchema schema = new TupleSchema(columns, sizes, tables,types);
 		
-		Integer expected = 2;
-		Integer actual = schema.getIndex("co1", "ta2");
+		Integer expected = 1;
+		Integer actual = schema.getIndex("co2", "bla");
 		
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
