@@ -11,6 +11,7 @@ import java.io.StringReader;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Helper;
 
 
 /**
@@ -138,5 +139,15 @@ public class Cross extends Operator {
 	@Override
 	public int getoffset() {
 		return 0;
+	}
+
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "CrossNode");
+		System.out.println(Helper.indent(depth) + "Left:");
+		op1.printTree(depth + 1);
+		System.out.println(Helper.indent(depth) + "Right:");
+		op2.printTree(depth + 1);
 	}
 }

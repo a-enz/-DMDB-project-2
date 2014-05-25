@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,7 +28,7 @@ public class RelVisitor implements Visitor{
 
 	@Override
 	public Visitable visit(Visitable node) throws StandardException {
-		if(node instanceof CursorNode) ((CursorNode) node).accept(this);
+		if(node instanceof CursorNode) return ((CursorNode) node).accept(this);
 		System.out.println("NodeClass: " + node.getClass());
 		return null;
 	}
@@ -46,30 +47,33 @@ public class RelVisitor implements Visitor{
 		FromTable current;
 		ArrayList<Scan>  scanList = new ArrayList<Scan>();
 		Iterator<Scan> sCursor;
-		Operator arg;
-		
-		while(cursor.hasNext()) {							//get all fromtables
-			current = cursor.next();
-			scanList.add(new Scan(current.getTableName().toString()));
-		}
-		
-		if(scanList.size() > 1) {							//cross that shit if more than one source
-			sCursor = scanList.iterator();
-			Cross cross = new Cross(sCursor.next(), sCursor.next());
-			while(sCursor.hasNext()) {
-				cross = new Cross(cross, sCursor.next());
+		Operator arg = null;
+		try {
+			while(cursor.hasNext()) {							//get all fromtables
+				current = cursor.next();
+				scanList.add(new Scan(current.getTableName().toString()));
 			}
-			arg = cross;
-		} else {
-			arg = scanList.get(0);
+			
+			if(scanList.size() > 1) {							//cross that shit if more than one source
+				sCursor = scanList.iterator();
+				Cross cross = new Cross(sCursor.next(), sCursor.next());
+				while(sCursor.hasNext()) {
+					cross = new Cross(cross, sCursor.next());
+				}
+				arg = cross;
+			} else {
+				arg = scanList.get(0);
+			}
+		} catch(IOException e){
+			e.printStackTrace();
 		}
 		
 		
 		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
 		node.getResultColumns().accept(this);
 		Select select = new Select(arg, predicate);
-		Project project = new Project();
-		return null;
+		//Project project = new Project();
+		return select;
 	}
 	
 	public Visitable visit(AndNode node) throws StandardException {

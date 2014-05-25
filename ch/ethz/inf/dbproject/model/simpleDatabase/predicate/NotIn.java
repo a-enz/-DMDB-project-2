@@ -35,4 +35,11 @@ public class NotIn implements Predicate{
 		return !table.contains(tuple);
 	}
 
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "NotInNode");
+		op.printTree(depth + 1);
+	}
+
 }

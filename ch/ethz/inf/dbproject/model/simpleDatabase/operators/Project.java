@@ -5,6 +5,7 @@ import java.util.*;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Helper;
 
 /**
  * Projection in relational algebra. Returns tuples that contain on projected
@@ -99,5 +100,11 @@ public final class Project extends Operator {
 	@Override
 	public int getoffset() {
 		return op.getoffset();
+	}
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "ProjectNode: ");
+		
 	}
 }

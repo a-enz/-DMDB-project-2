@@ -8,7 +8,7 @@ import com.foundationdb.sql.parser.Visitor;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
-public class ColumnRef implements Extractor{
+public class ColumnRef implements Extractor, Printable{
 	private String column;
 	private String table;
 	private int type;
@@ -30,7 +30,13 @@ public class ColumnRef implements Extractor{
 
 	@Override
 	public Visitable accept(Visitor v) throws StandardException {
-		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "ColumnRefNode: " + table + "/" + column + "/" + type);
+	}
+	
+	
 }

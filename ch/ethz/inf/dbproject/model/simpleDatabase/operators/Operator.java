@@ -7,13 +7,14 @@ import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Printable;
 
 /**
  * Base class of all operators. An operator processes one tuple at a time. It
  * allows an application to call moveNext() to move to the next tuple. After
  * moveNext() the application can retrieve the new tuple by a call to current().
  */
-public abstract class Operator implements Visitable{
+public abstract class Operator implements Visitable, Printable{
 	/**
 	 * The current tuple.
 	 */

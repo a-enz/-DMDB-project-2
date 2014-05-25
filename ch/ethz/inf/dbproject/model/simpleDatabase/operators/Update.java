@@ -85,4 +85,10 @@ public final class Update extends Operator {
 	public int getoffset() {
 		return 0;
 	}
+
+	@Override
+	public void printTree(int depth) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -8,7 +8,7 @@ import com.foundationdb.sql.parser.Visitor;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
-public class Constant implements Extractor{
+public class Constant implements Extractor, Printable{
 
 	private Value value;
 	
@@ -25,6 +25,11 @@ public class Constant implements Extractor{
 	public Visitable accept(Visitor v) throws StandardException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "ConstantNode");
 	}
 
 }
