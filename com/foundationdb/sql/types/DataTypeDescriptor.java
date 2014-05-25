@@ -157,7 +157,7 @@ public final class DataTypeDescriptor
         // Re-use pre-defined types wherever possible.
         switch (jdbcType) {
         case Types.INTEGER:
-            return isNullable ? INTEGER : import com.foundationdb.sql.StandardException;INTEGER_NOT_NULL;
+            return isNullable ? INTEGER : INTEGER_NOT_NULL;
         case Types.SMALLINT:
             return isNullable ? SMALLINT : SMALLINT_NOT_NULL;
         default:

@@ -31,6 +31,8 @@ public class Scan extends Operator {
 	private final String fileName;
 	private final String tableName;
 	private byte[] buffer;
+	private final String DBPATH = "/home/mlei/workspace/database/";
+	private final String EXTENSION = ".txt";
 	private int offset; // TODO: calculate offset and update !!!
 	
 	private int blocksize = 1024;
@@ -42,17 +44,18 @@ public class Scan extends Operator {
 	 * @param fileName file to read tuples from
 	 * @throws IOException 
 	 */
-	public Scan(final String fileName) throws IOException {
+	public Scan(final String tableName) throws IOException {
 		// read from file
+		fileName = tableName + EXTENSION;
 		RandomAccessFile reader = null;
 		try {
-			reader = new RandomAccessFile (fileName, "rw");
+			reader = new RandomAccessFile (DBPATH + fileName, "rw");
 		} catch (final FileNotFoundException e) {
+			System.out.println("File not found: " + fileName);
 			throw new RuntimeException("could not find file " + fileName);
 		}
 		this.reader = reader;
-		this.fileName = fileName;
-		this.tableName = fileName.substring(0, fileName.indexOf("."));
+		this.tableName = tableName;
 		this.buffer = new byte[blocksize];
 		// create schema
 		String[] columnNames;
@@ -167,6 +170,10 @@ public class Scan extends Operator {
 	public Visitable accept(Visitor v) throws StandardException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public String getTableName() {
+		return this.tableName;
 	}
 
 	@Override
