@@ -40,16 +40,16 @@ public class Part2Test {
 		assertEquals(expected, actual);
 	}
 
-	@Test
-	public void testSelect() throws IOException {
-		System.out.println("----------testSelect--------");
-		Operator op = new Select<String>(new Scan("cases.txt"), "name", "Daniel");
-		String expected = "1,Daniel,bli,1";
-		String actual = concatTuples(op);
-		System.out.println("=" + expected + "=");
-		System.out.println("=" + actual + "=");
-		assertEquals(expected, actual);
-	}
+//	@Test
+//	public void testSelect() throws IOException {
+//		System.out.println("----------testSelect--------");
+//		Operator op = new Select<String>(new Scan("cases.txt"), "name", "Daniel");
+//		String expected = "1,Daniel,bli,1";
+//		String actual = concatTuples(op);
+//		System.out.println("=" + expected + "=");
+//		System.out.println("=" + actual + "=");
+//		assertEquals(expected, actual);
+//	}
 
 	@Test
 	public void testProjectByName() throws IOException {
@@ -75,16 +75,16 @@ public class Part2Test {
 		assertEquals(expected, actual);
 	}
 
-	@Test
-	public void testSelectProject() throws IOException {
-		System.out.println("----------testSelectProject--------");
-		Operator op = new Project(new Select<String>(new Scan("cases.txt"), "name", "Daniel"), "name", "cases");
-		String expected = "Daniel";
-		String actual = concatTuples(op);
-		System.out.println("=" + expected + "=");
-		System.out.println("=" + actual + "=");
-		assertEquals(expected, actual);
-	}
+//	@Test
+//	public void testSelectProject() throws IOException {
+//		System.out.println("----------testSelectProject--------");
+//		Operator op = new Project(new Select<String>(new Scan("cases.txt"), "name", "Daniel"), "name", "cases");
+//		String expected = "Daniel";
+//		String actual = concatTuples(op);
+//		System.out.println("=" + expected + "=");
+//		System.out.println("=" + actual + "=");
+//		assertEquals(expected, actual);
+//	}
 	
 	@Test
 	public void testCross() throws IOException{
@@ -99,17 +99,17 @@ public class Part2Test {
 		assertEquals(expected,actual);
 	}
 	
-	@Test
-	public void testGetCaseById() throws IOException{
-		System.out.println("----------testGetCaseById--------");
-		DatastoreInterface dbInterface = new DatastoreInterfaceSimpleDatabase();
-		Case ca = dbInterface.getCaseById(2);
-		String expected = "Mathias,2,blo,2";
-		String actual = ca.toString();
-		System.out.println("=" + expected + "=");
-		System.out.println("=" + actual + "=");
-		assertEquals(expected,actual);
-	}
+//	@Test
+//	public void testGetCaseById() throws IOException{
+//		System.out.println("----------testGetCaseById--------");
+//		DatastoreInterface dbInterface = new DatastoreInterfaceSimpleDatabase();
+//		Case ca = dbInterface.getCaseById(2);
+//		String expected = "Mathias,2,blo,2";
+//		String actual = ca.toString();
+//		System.out.println("=" + expected + "=");
+//		System.out.println("=" + actual + "=");
+//		assertEquals(expected,actual);
+//	}
 	
 	@Test
 	public void testStatementNextWord(){		

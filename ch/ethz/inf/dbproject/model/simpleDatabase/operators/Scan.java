@@ -35,10 +35,7 @@ public class Scan extends Operator {
 	private final String EXTENSION = ".txt";
 	private int offset; // TODO: calculate offset and update !!!
 	
-	private int blocksize = 1024;
-	private int headerblock = 3;
 
-	
 	/**
 	 * Contructs a new scan operator.
 	 * @param fileName file to read tuples from
@@ -119,13 +116,40 @@ public class Scan extends Operator {
 	@Override
 	public boolean moveNext() {
 		
+//		old version
+//		===========
+		
+//		while (reader.getFilePointer() + 1024 < reader.length()){
+//			reader.read(buffer);
+//			offset += blocksize;
+//			String[] schemaValue = parseBuffer(buffer);
+//			this.current = new Tuple(this.schema, schemaValue);
+//			return true;
+//		}
+//		return false;
+		
+		
+		//TODO: we just need to check the first bit (the valid flag!) 
+		
 		try {
-			if (reader.getFilePointer() + 1024 < reader.length()){
+			while (reader.getFilePointer() + 1024 < reader.length()){
 				reader.read(buffer);
 				offset += blocksize;
 				String[] schemaValue = parseBuffer(buffer);
-				this.current = new Tuple(this.schema, schemaValue);
-				return true;
+
+				boolean notnullschema = false;
+				
+				for (String s:schemaValue){
+					if(s.length() != 0){
+						notnullschema = true;
+						break;
+					}
+				}
+				
+				if (notnullschema){
+					this.current = new Tuple(this.schema, schemaValue);
+					return true;
+				}
 			}
 			return false;
 			
