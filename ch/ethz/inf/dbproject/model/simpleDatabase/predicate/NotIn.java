@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
+import ch.ethz.inf.dbproject.model.simpleDatabase.dummy.*;
 
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.Visitable;

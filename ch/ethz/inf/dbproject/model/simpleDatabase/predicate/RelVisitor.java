@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.dummy.*;
 
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.AndNode;
