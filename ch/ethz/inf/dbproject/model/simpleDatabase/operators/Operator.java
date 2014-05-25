@@ -20,6 +20,10 @@ public abstract class Operator implements Visitable, Printable{
 	 */
 	protected Tuple current;
 	protected TupleSchema schema;
+	
+	protected int blocksize = 1024;
+	protected int headerblock = 3;
+	
 	/**
 	 * Moves forward to the next tuple. The next tuple can be retrieved by a
 	 * call to current(). If there is no more tuple, this method returns false.
