@@ -78,7 +78,7 @@ public class Scan extends Operator {
 			tableNames[i] = this.tableName;
 		}
 
-		this.schema = new TupleSchema (columnNames,columnSize, tableNames);
+		this.schema = new TupleSchema (columnNames, columnSize, tableNames);
 	}
 	
 	public static String parseLine(byte[] data) {

@@ -9,13 +9,18 @@ public class ColumnInfo {
 	/**
 	 * @param args
 	 */
-	public ColumnInfo(String tableName, String columnName, int size) {
+	public ColumnInfo(String columnName, String tableName, int size) {
 		this.tableName = tableName;
 		this.columnName = columnName;
 		this.size = size;
 	}
 	
-
+	public ColumnInfo(String columnName, String tableName) {
+		this.tableName = tableName;
+		this.columnName = columnName;
+		this.size = 0;
+	}
+	
 
 	public String getTableName(){
 		return tableName;
@@ -29,14 +34,14 @@ public class ColumnInfo {
 		return size;
 	}
 	  
-	public int hashcode() {
+	public int hashCode() {
 		  String string = tableName + ":=:" + columnName;
 		  return string.hashCode();
 	}
 	
     public boolean equals(Object other){
     	ColumnInfo othercolumn = (ColumnInfo) other;
-    	if (this.tableName == othercolumn.tableName && this.columnName == othercolumn.columnName){
+    	if (this.tableName.equals(othercolumn.getTableName()) && this.columnName.equals(othercolumn.getColumnName())){
     		return true;
     	}
     	return false;
