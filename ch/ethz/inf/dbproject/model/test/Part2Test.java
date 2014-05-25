@@ -148,10 +148,19 @@ public class Part2Test {
 	@Test
 	public void testMultiKey(){
 		System.out.println("-------------testMultiKey----------------");
-		String[] columns = new String[3]{bla,blab,bla};
-		Integer[] sizes;
-		String[] tables;
-		TupleSchema schema = new TupleSchema(columns, sizes, tables);
+		String[] columns = "co1,co2,co1".split(",");
+		String[] sizes = "10,10,100".split(",");
+		String[] tables = "ta1,ta1,ta2".split(",");
+		String[] types = "0,0,0".split(",");
+		
+		TupleSchema schema = new TupleSchema(columns, sizes, tables,types);
+		
+		Integer expected = 2;
+		Integer actual = schema.getIndex("co1", "ta2");
+		
+		System.out.println("=" + expected + "=");
+		System.out.println("=" + actual + "=");
+		assertEquals(expected,actual);
 	}
 
 	/**

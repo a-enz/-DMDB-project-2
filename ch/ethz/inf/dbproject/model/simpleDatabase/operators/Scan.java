@@ -34,6 +34,7 @@ public class Scan extends Operator {
 	private int offset; // TODO: calculate offset and update !!!
 	
 	private int blocksize = 1024;
+	private int headerblock = 3;
 
 	
 	/**
@@ -77,8 +78,17 @@ public class Scan extends Operator {
 		for (int i = 0; i < tableNames.length; i++){
 			tableNames[i] = this.tableName;
 		}
+		
+		String[] columnType;
+		try{
+			reader.read(buffer);
+			columnType = parseLine(buffer).split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read column type: " + this.reader + 
+					". Error is " + e);
+		}
 
-		this.schema = new TupleSchema (columnNames,columnSize, tableNames);
+		this.schema = new TupleSchema (columnNames, columnSize, tableNames, columnType);
 	}
 	
 	public static String parseLine(byte[] data) {
@@ -162,7 +172,7 @@ public class Scan extends Operator {
 
 	@Override
 	public void reset() throws IOException {
-		reader.seek(2*blocksize);
+		reader.seek(headerblock*blocksize);
 	}
 
 	@Override

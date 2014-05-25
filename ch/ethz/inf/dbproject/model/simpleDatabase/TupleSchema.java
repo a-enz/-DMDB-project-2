@@ -11,37 +11,31 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.*;
  */
 public class TupleSchema {
 	private final ColumnInfo[] columnInfos;
-	private final HashMap<MultiKey,Integer> map;
+	private final HashMap<ColumnInfo,Integer> map;
 	
 	/**
 	 * Constructs a new tuple schema.
 	 * @param columnNames column names
 	 */
-	public TupleSchema(final String[] columnNames, final String[] columnSize, final String[] columnTables) {
+	public TupleSchema(final String[] columnNames, final String[] columnSize, final String[] columnTables, final String[] columnType) {
 		
 		columnInfos = new ColumnInfo[columnNames.length];
-		map = new HashMap<MultiKey,Integer>();
+		map = new HashMap<ColumnInfo,Integer>();
 		
 		for (int i = 0; i < columnNames.length; i++){
-			columnInfos[i] = new ColumnInfo(columnTables[i], columnNames[i], Integer.parseInt(columnSize[i]));
-			MultiKey key = new MultiKey();
-			key.setKey(columnTables[i]);
-			key.setKey(columnNames[i]);
-			map.put(key, i);
+			columnInfos[i] = new ColumnInfo(columnNames[i], columnTables[i], Integer.parseInt(columnSize[i]), Integer.parseInt(columnType[i]));
+			map.put(columnInfos[i], i);
 		}
 	}
 	
-	public TupleSchema(final String[] columnNames, final Integer[] columnSize, final String[] columnTables) {
+	public TupleSchema(final String[] columnNames, final Integer[] columnSize, final String[] columnTables, final Integer[] columnType) {
 		
 		columnInfos = new ColumnInfo[columnNames.length];
-		map = new HashMap<MultiKey,Integer>();
+		map = new HashMap<ColumnInfo, Integer>();
 		
 		for (int i = 0; i < columnNames.length; i++){
-			columnInfos[i] = new ColumnInfo(columnTables[i], columnNames[i], columnSize[i]);
-			MultiKey key = new MultiKey();
-			key.setKey(columnTables[i]);
-			key.setKey(columnNames[i]);
-			map.put(key, i);
+			columnInfos[i] = new ColumnInfo(columnNames[i], columnTables[i], columnSize[i], columnType[i]);
+			map.put(columnInfos[i], i);
 		}
 	}
 
@@ -52,9 +46,7 @@ public class TupleSchema {
 	 * @return index of column in tuple
 	 */
 	public int getIndex(final String column, final String table) {
-		MultiKey key = new MultiKey();
-		key.setKey(column);
-		key.setKey(table);
+		ColumnInfo key = new ColumnInfo(column, table);
 		final Integer index = map.get(key);
 		if (index == null) {
 			return -1; // error
@@ -115,13 +107,15 @@ public class TupleSchema {
 	}
 	
 	public int getType(final int index){
-		return 0;
-		//TODO: return typecode from hashmap
+		return columnInfos[index].getType();
 	}
 	
 	public Integer[] getAllType(){
-		return null;
-		//TODO: return
+		Integer[] result = new Integer[columnInfos.length];
+		for(int i=0; i<columnInfos.length; i++){
+			result[i] = columnInfos[i].getType();
+		}
+		return result;
 	}
 
 }

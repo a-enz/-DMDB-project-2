@@ -15,6 +15,7 @@ public final class Update extends Operator {
 
 	private final Operator op;
 	private final String[] columns;
+	private final String[] tables;
 	private final String[] values;
 	private final String fileName;
 	private final RandomAccessFile reader;
@@ -26,9 +27,9 @@ public final class Update extends Operator {
 	 * @param column single column name that will be projected
 	 * @throws FileNotFoundException 
 	 */
-	public Update(final Operator op, final String columns, final String[] values) throws FileNotFoundException
+	public Update(final Operator op, final String columns, final String tables, final String[] values) throws FileNotFoundException
 	{
-		this(op, new String[] { columns }, values);
+		this(op, new String[] { columns }, new String[] { tables }, values);
 	}
 
 	/**
@@ -37,9 +38,10 @@ public final class Update extends Operator {
 	 * @param columns column names that will be projected
 	 * @throws FileNotFoundException 
 	 */
-	public Update(final Operator op, final String[] columns, final String[] values) throws FileNotFoundException {
+	public Update(final Operator op, final String[] columns, final String[] tables, final String[] values) throws FileNotFoundException {
 		this.op = op;
 		this.columns = columns;
+		this.tables = tables;
 		this.fileName = op.getFileName();
 		this.values = values;
 		this.schema = op.getSchema();
@@ -58,8 +60,8 @@ public final class Update extends Operator {
 			//TODO: get Offset
 			int offset = 0; //this has to be the offset
 			for (int i=0; i< columns.length; i++){
-				int columnoffset = schema.getOffset(columns[i]);
-				reader.write(values[i].getBytes(), offset + columnoffset, schema.getSize(columns[i]));
+				int columnoffset = schema.getOffset(columns[i], tables[i]);
+				reader.write(values[i].getBytes(), offset + columnoffset, schema.getSize(columns[i], tables[i]));
 			}
 		}
 	}

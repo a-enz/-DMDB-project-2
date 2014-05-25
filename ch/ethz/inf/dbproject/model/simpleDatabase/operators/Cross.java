@@ -72,10 +72,11 @@ public class Cross extends Operator {
 		
 		String[] columnNames = concat(tuple1.getAllNames(), tuple2.getAllNames());
 		Integer[] columnSizes = concat(tuple1.getAllSize(), tuple2.getAllSize());
-		String [] columnTable = concat(tuple1.getAllTables(), tuple2.getAllTables());
+		String[] columnTable = concat(tuple1.getAllTables(), tuple2.getAllTables());
+		Integer[] columnTypes = concat(tuple1.getAllType(), tuple2.getAllType());
 
 		
-		this.schema = new TupleSchema(columnNames, columnSizes, columnTable);
+		this.schema = new TupleSchema(columnNames, columnSizes, columnTable, columnTypes);
 		
 		op1next = op1.moveNext();
 	}
