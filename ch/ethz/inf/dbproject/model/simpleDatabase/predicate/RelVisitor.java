@@ -28,10 +28,20 @@ public class RelVisitor implements Visitor{
 
 	@Override
 	public Visitable visit(Visitable node) throws StandardException {
-		if(node instanceof CursorNode) return ((CursorNode) node).accept(this);
+		if(node instanceof CursorNode) return visit((CursorNode) node);
+		else if(node instanceof SelectNode) return visit((SelectNode) node);
+		else if(node instanceof AndNode) return visit((AndNode) node);
+		else if(node instanceof ConstantNode) return visit((ConstantNode) node);
+		else if(node instanceof BinaryRelationalOperatorNode) return visit((BinaryRelationalOperatorNode) node);
+		else if(node instanceof SelectNode) return visit((SelectNode) node);
+		else if(node instanceof SelectNode) return visit((SelectNode) node);
+		else if(node instanceof SelectNode) return visit((SelectNode) node);
+		else if(node instanceof SelectNode) return visit((SelectNode) node);
 		System.out.println("NodeClass: " + node.getClass());
 		return null;
 	}
+	
+	
 	
 
 	@Override
@@ -42,6 +52,7 @@ public class RelVisitor implements Visitor{
 	@Override
 	public Visitable visit(SelectNode node) throws StandardException {
 		
+		System.out.println("SelectNode visited");
 		Iterator<FromTable> cursor = node.getFromList().iterator();
 		Iterator<ResultColumn> rCursor = node.getResultColumns().iterator();
 		FromTable current;
@@ -97,7 +108,7 @@ public class RelVisitor implements Visitor{
 		return res;
 	}
 	
-	public Visitable visit(ConstantNode node) throws StandardException, ParseException {
+	public Visitable visit(ConstantNode node) throws StandardException {
 		int type = 0;
 		TypeId id = node.getTypeId();
 		if (id.isStringTypeId()) type = 0;
@@ -116,13 +127,11 @@ public class RelVisitor implements Visitor{
 
 	@Override
 	public boolean stopTraversal() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean skipChildren(Visitable node) throws StandardException {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

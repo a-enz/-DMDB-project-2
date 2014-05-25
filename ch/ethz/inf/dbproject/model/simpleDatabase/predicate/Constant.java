@@ -12,8 +12,12 @@ public class Constant implements Extractor, Printable{
 
 	private Value value;
 	
-	public Constant(String val, int type) throws ParseException{
-		value = new Value(val, type);
+	public Constant(String val, int type){
+		try {
+			value = new Value(val, type);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
