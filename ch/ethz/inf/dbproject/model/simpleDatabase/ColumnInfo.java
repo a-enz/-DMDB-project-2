@@ -5,15 +5,27 @@ public class ColumnInfo {
 	private String tableName;
 	private String columnName;
 	private final int size;
+	private final int type;
+	
+	/*
+	Type Codes
+	==========
+	STRING = 0;
+	INTEGER = 1;
+	FLOAT = 2;
+	DOUBLE = 3;
+	DATE = 4;
+	*/
 	
 	/**
 	 * @param args
 	 */
 
-	public ColumnInfo(String columnName, String tableName, int size) {
+	public ColumnInfo(String columnName, String tableName, int size, int type) {
 		this.tableName = tableName;
 		this.columnName = columnName;
 		this.size = size;
+		this.type = type;
 	}
 	
 
@@ -21,6 +33,7 @@ public class ColumnInfo {
 		this.tableName = tableName;
 		this.columnName = columnName;
 		this.size = 0;
+		this.type = 0;
 	}
 
 	public String getTableName(){
@@ -33,6 +46,10 @@ public class ColumnInfo {
 	
 	public int getSize(){
 		return size;
+	}
+	
+	public int getType(){
+		return type;
 	}
 	  
 	public int hashCode() {

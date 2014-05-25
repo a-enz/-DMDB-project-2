@@ -59,13 +59,16 @@ public final class Project extends Operator {
 				
 				Integer[] columnSize = new Integer[columns.length];
 				String[] columnTable = new String[columns.length];
+				Integer[] columnType = new Integer[columns.length];
 				
 				for(int i = 0; i < columns.length; i++){
-					columnSize[i] = opSchema.getSize(columns[i], tables[i]);
-					columnTable[i] = opSchema.getTableName(columns[i], tables[i]);
+					int index = opSchema.getIndex(columns[i], tables[i]);
+					columnSize[i] = opSchema.getSize(index);
+					columnTable[i] = opSchema.getTableName(index);
+					columnType[i] = opSchema.getType(index);
 				}
 
-				this.schema = new TupleSchema(columns, columnSize, columnTable);
+				this.schema = new TupleSchema(columns, columnSize, columnTable, columnType);
 				first = false;
 			}
 

@@ -149,13 +149,11 @@ public class Part2Test {
 	public void testMultiKey(){
 		System.out.println("-------------testMultiKey----------------");
 		String[] columns = "co1,co2,co1".split(",");
-		Integer[] sizes = new Integer[3];
-		sizes[0] = 10;
-		sizes[1] = 10;
-		sizes[2] = 100;
+		String[] sizes = "10,10,100".split(",");
 		String[] tables = "ta1,ta1,ta2".split(",");
+		String[] types = "0,0,0".split(",");
 		
-		TupleSchema schema = new TupleSchema(columns, sizes, tables);
+		TupleSchema schema = new TupleSchema(columns, sizes, tables,types);
 		
 		Integer expected = 2;
 		Integer actual = schema.getIndex("co1", "ta2");
