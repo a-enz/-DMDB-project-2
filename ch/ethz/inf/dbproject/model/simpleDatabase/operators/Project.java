@@ -107,7 +107,7 @@ public final class Project extends Operator {
 
 	@Override
 	public void printTree(int depth) {
-		System.out.println(Helper.indent(depth) + "ProjectNode: ");
-		
+		System.out.println(Helper.indent(depth) + "ProjectNode: Tables: " + tables.toString() + ", Columns: " + columns.toString());
+		op.printTree(depth + 1);
 	}
 }

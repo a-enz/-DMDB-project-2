@@ -72,10 +72,15 @@ public class RelVisitor implements Visitor{
 		System.out.println("SelectNode visited");
 		Iterator<FromTable> cursor = node.getFromList().iterator();
 		Iterator<ResultColumn> rCursor = node.getResultColumns().iterator();
+		ResultColumn rCurrent;
+		ArrayList<String> rColumns = new ArrayList<String>();
+		ArrayList<String> rTables = new ArrayList<String>();
+		
 		FromTable current;
 		ArrayList<Scan>  scanList = new ArrayList<Scan>();
 		Iterator<Scan> sCursor;
 		Operator arg = null;
+		
 		try {
 			while(cursor.hasNext()) {							//get all fromtables
 				current = cursor.next();
@@ -97,11 +102,20 @@ public class RelVisitor implements Visitor{
 			e.printStackTrace();
 		}
 		
+		while(rCursor.hasNext()) {
+			rCurrent = rCursor.next();
+			if (rCurrent instanceof AllResultColumn) {
+				arg.getSchema().get
+			}
+			rTables.add(rCurrent.getTableName().toString());
+			rColumns.add(rCurrent.getColumnName().toString());
+		}
+		
 		
 		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
 		node.getResultColumns().accept(this);
 		Select select = new Select(arg, predicate);
-		//Project project = new Project();
+		//Project project = new Project(select);
 		return select;
 	}
 	

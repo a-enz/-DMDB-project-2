@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Helper;
 
 /**
  * Projection in relational algebra. Returns tuples that contain on projected
@@ -69,5 +70,11 @@ public final class GroupBy extends Operator {
 	@Override
 	public int getoffset() {
 		return op.getoffset();
+	}
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "GroupByNode: " + columns.toString());
+		op.printTree(depth + 1);
 	}
 }

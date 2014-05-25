@@ -24,7 +24,7 @@ public class ColumnInfo {
 		this.tableName = tableName;
 		this.columnName = columnName;
 		this.size = size;
-		//this.type = type;
+		this.type = type;
 	}	
 
 	public ColumnInfo(String columnName, String tableName) {
