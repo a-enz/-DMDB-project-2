@@ -5,9 +5,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import ch.ethz.inf.dbproject.model.simpleDatabase.dummy.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
 
 import com.foundationdb.sql.StandardException;
+import com.foundationdb.sql.parser.AllResultColumn;
 import com.foundationdb.sql.parser.AndNode;
 import com.foundationdb.sql.parser.BinaryRelationalOperatorNode;
 import com.foundationdb.sql.parser.CharConstantNode;
@@ -66,6 +67,7 @@ public class RelVisitor implements Visitor{
 		return node.getResultSetNode().accept(this);
 	}
 
+	//magic happens here
 	@Override
 	public Visitable visit(SelectNode node) throws StandardException {
 		
@@ -75,6 +77,7 @@ public class RelVisitor implements Visitor{
 		ResultColumn rCurrent;
 		ArrayList<String> rColumns = new ArrayList<String>();
 		ArrayList<String> rTables = new ArrayList<String>();
+		String[] tmp;
 		
 		FromTable current;
 		ArrayList<Scan>  scanList = new ArrayList<Scan>();
@@ -102,21 +105,23 @@ public class RelVisitor implements Visitor{
 			e.printStackTrace();
 		}
 		
-		while(rCursor.hasNext()) {
+		while(rCursor.hasNext()) {								//generate projection clause
 			rCurrent = rCursor.next();
 			if (rCurrent instanceof AllResultColumn) {
-				arg.getSchema().get
+				tmp = arg.getSchema().getAllColumnNamesByTable(((AllResultColumn) rCurrent).getTableName());
+				for(int i = 0; i < tmp.length; i++) {
+					rTables.add(((AllResultColumn) rCurrent).getTableName());
+				}
 			}
 			rTables.add(rCurrent.getTableName().toString());
 			rColumns.add(rCurrent.getColumnName().toString());
 		}
 		
-		
 		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
 		node.getResultColumns().accept(this);
 		Select select = new Select(arg, predicate);
-		//Project project = new Project(select);
-		return select;
+		Project project = new Project(select, (String[]) rTables.toArray(), (String[]) rColumns.toArray());
+		return project;
 	}
 	
 	public Visitable visit(AndNode node) throws StandardException {
