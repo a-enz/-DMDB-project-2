@@ -23,7 +23,7 @@ public class TupleSchema {
 		
 		for (int i = 0; i < columnNames.length; i++){
 			columnInfos[i] = new ColumnInfo(columnNames[i], columnTables[i], Integer.parseInt(columnSize[i]), Integer.parseInt(columnType[i]));
-			map.put(columnInf
+			map.put(columnInfos[i], i);
 		}
 	}
 	
