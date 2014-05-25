@@ -1,7 +1,7 @@
 package ch.ethz.inf.dbproject.model.test;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.RelVisitor;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.dummy.*;
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.SQLParser;
 import com.foundationdb.sql.parser.StatementNode;

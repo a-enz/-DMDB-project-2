@@ -5,21 +5,21 @@ public class ColumnInfo {
 	private String tableName;
 	private String columnName;
 	private final int size;
-	private final int type;
+	//private final int type;
 	
 	/**
 	 * @param args
 	 */
-	public ColumnInfo(String tableName, String columnName, int size, int type) {
+	public ColumnInfo(String tableName, String columnName, int size) {
 		this.tableName = tableName;
 		this.columnName = columnName;
 		this.size = size;
-		this.type = type;
+		//this.type = type;
 	}
 	
-	public int getType() {
-		return type;
-	}
+//	public int getType() {
+//		return type;
+//	}
 
 	public String getTableName(){
 		return tableName;

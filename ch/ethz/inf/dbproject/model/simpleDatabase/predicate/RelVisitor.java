@@ -11,6 +11,7 @@ import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.AndNode;
 import com.foundationdb.sql.parser.BinaryRelationalOperatorNode;
 import com.foundationdb.sql.parser.CharConstantNode;
+import com.foundationdb.sql.parser.ColumnReference;
 import com.foundationdb.sql.parser.ConstantNode;
 import com.foundationdb.sql.parser.CursorNode;
 import com.foundationdb.sql.parser.FromTable;
@@ -33,16 +34,32 @@ public class RelVisitor implements Visitor{
 		else if(node instanceof AndNode) return visit((AndNode) node);
 		else if(node instanceof ConstantNode) return visit((ConstantNode) node);
 		else if(node instanceof BinaryRelationalOperatorNode) return visit((BinaryRelationalOperatorNode) node);
+		else if(node instanceof ColumnReference) return visit((ColumnReference) node);
+		else if(node instanceof ResultColumnList) return visit((ResultColumnList) node);
 		else if(node instanceof SelectNode) return visit((SelectNode) node);
 		else if(node instanceof SelectNode) return visit((SelectNode) node);
-		else if(node instanceof SelectNode) return visit((SelectNode) node);
-		else if(node instanceof SelectNode) return visit((SelectNode) node);
-		System.out.println("NodeClass: " + node.getClass());
+		System.out.println("Visit NodeClass: " + node.getClass());
+		return null;
+	}
+	
+	public Visitable visit(ResultColumnList node) {
 		return null;
 	}
 	
 	
-	
+	public Visitable visit(ColumnReference node) {
+		String table = node.getTableName();
+		String column = node.getColumnName();
+		int type;
+		try {
+			type = Helper.typeConvert(node.getTypeId());
+		} catch (Exception e) {
+			type = 0;
+			//e.printStackTrace();
+		}
+		
+		return new ColumnRef(table, column, type);
+	}
 
 	@Override
 	public Visitable visit(CursorNode node) throws StandardException {
@@ -63,7 +80,7 @@ public class RelVisitor implements Visitor{
 			while(cursor.hasNext()) {							//get all fromtables
 				current = cursor.next();
 				System.out.println(current.getOrigTableName().toString());
-				scanList.add(new Scan(current.getTableName().toString()));
+				scanList.add(new Scan(current.getOrigTableName().toString()));
 			}
 			
 			if(scanList.size() > 1) {							//cross that shit if more than one source
