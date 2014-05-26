@@ -92,6 +92,22 @@ public class Scan extends Operator {
 		}
 
 		this.schema = new TupleSchema (columnNames, columnSize, tableNames, columnType);
+		
+		//========== For testing purposes=============
+		
+//		for (String s:columnNames){
+//			System.out.println("columnName: " + s);
+//		}
+		
+		for (String s:tableNames){
+		System.out.println("columnTable: " + s);
+	}
+		
+//		for (String s:columnSize){
+//		System.out.println("columnSizes: " + s);
+//	}
+		
+		//============================================
 	}
 	
 	public static String parseLine(byte[] data) {
@@ -103,7 +119,7 @@ public class Scan extends Operator {
 	    	  break;
 	      }
 	    }
-	    return cbuf.toString();
+	    return cbuf.toString().toLowerCase();
 	  }
 
 	/**
