@@ -19,7 +19,6 @@ public final class Project extends Operator {
 	private TupleSchema opSchema;
 
 	private TupleSchema schema;
-	private boolean first;
 
 	/**
 	 * Constructs a new projection operator.
@@ -31,6 +30,7 @@ public final class Project extends Operator {
 		this(op, new String[] { column }, new String[] { table });
 	}
 
+
 	/**
 	 * Constructs a new projection operator.
 	 * @param op operator to pull from
@@ -40,8 +40,22 @@ public final class Project extends Operator {
 		this.op = op;
 		this.columns = columns;
 		this.tables = tables;
+		
+		this.opSchema = op.getSchema();
+		
+		Integer[] columnSize = new Integer[columns.length];
+		String[] columnTable = new String[columns.length];
+		Integer[] columnType = new Integer[columns.length];
+		
+		for(int i = 0; i < columns.length; i++){
+			System.out.println("request index: " + columns[i] + " " + tables[i]);
+			int index = opSchema.getIndex(columns[i], tables[i]);
+			columnSize[i] = opSchema.getSize(index);
+			columnTable[i] = opSchema.getTableName(index);
+			columnType[i] = opSchema.getType(index);
+		}
 
-		this.first = true;
+		this.schema = new TupleSchema(columns, columnSize, columnTable, columnType);
 	}
 
 	@Override
@@ -53,25 +67,6 @@ public final class Project extends Operator {
 		List<String> result = new ArrayList<String>();
 		
 		if (op.moveNext()){
-
-			if (first){
-				this.opSchema = op.current.getSchema();
-				
-				Integer[] columnSize = new Integer[columns.length];
-				String[] columnTable = new String[columns.length];
-				Integer[] columnType = new Integer[columns.length];
-				
-				for(int i = 0; i < columns.length; i++){
-					int index = opSchema.getIndex(columns[i], tables[i]);
-					columnSize[i] = opSchema.getSize(index);
-					columnTable[i] = opSchema.getTableName(index);
-					columnType[i] = opSchema.getType(index);
-				}
-
-				this.schema = new TupleSchema(columns, columnSize, columnTable, columnType);
-				first = false;
-			}
-
 			for (int i = 0; i < columns.length; i++){
 				int index = opSchema.getIndex(columns[i], tables[i]); 
 				if (index >= 0){

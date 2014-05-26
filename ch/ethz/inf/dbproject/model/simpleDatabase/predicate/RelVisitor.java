@@ -122,7 +122,13 @@ public class RelVisitor implements Visitor{
 			e.printStackTrace();
 		}
 		
-		while(rCursor.hasNext()) {								//generate projection clause
+		//=============================================================
+		//TODO: this has to be fixed:
+		// use rCurrent.getExpression.getTableName instead of rCurrent.getTableName
+		// for getColumnName the same
+		//==============================================================
+		
+		while(rCursor.hasNext()) {//generate projection clause
 			rCurrent = rCursor.next();
 			if (rCurrent instanceof AllResultColumn) {
 				tmp = arg.getSchema().getAllColumnNamesByTable(((AllResultColumn) rCurrent).getTableName());
@@ -130,14 +136,15 @@ public class RelVisitor implements Visitor{
 					rTables.add(((AllResultColumn) rCurrent).getTableName());
 				}
 			}
-			rTables.add(rCurrent.getTableName());
-			rColumns.add(rCurrent.getColumnName());
+			rTables.add(rCurrent.getExpression().getTableName());
+			rColumns.add(rCurrent.getExpression().getColumnName());
 		}
 		
+
 		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
 		node.getResultColumns().accept(this);
 		Select select = new Select(arg, predicate);
-		Project project = new Project(select, rTables.toArray(new String[rTables.size()]), (String[]) rColumns.toArray(new String[rTables.size()]));
+		Project project = new Project(select, rColumns.toArray(new String[rTables.size()]), rTables.toArray(new String[rTables.size()]));
 		return project;
 	}
 	
