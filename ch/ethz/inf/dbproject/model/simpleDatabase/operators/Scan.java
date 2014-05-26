@@ -107,9 +107,9 @@ public class Scan extends Operator {
 //		System.out.println("columnSizes: " + s);
 //	}
 		
-		for (String s:columnType){
-		System.out.println("columnTypes: " + s);
-	}
+//		for (String s:columnType){
+//		System.out.println("columnTypes: " + s);
+//	}
 		
 		//============================================
 	}
