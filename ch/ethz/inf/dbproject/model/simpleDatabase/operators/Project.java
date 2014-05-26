@@ -5,6 +5,7 @@ import java.util.*;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Helper;
 
 /**
  * Projection in relational algebra. Returns tuples that contain on projected
@@ -14,33 +15,49 @@ public final class Project extends Operator {
 
 	private final Operator op;
 	private final String[] columns;
+	private final String[] tables;
 	private TupleSchema opSchema;
 
 	private TupleSchema schema;
-	private boolean first;
 
 	/**
 	 * Constructs a new projection operator.
 	 * @param op operator to pull from
 	 * @param column single column name that will be projected
 	 */
-	public Project(final Operator op, final String column)
+	public Project(final Operator op, final String column, final String table)
 	{
-		this(op, new String[] { column });
+		this(op, new String[] { column }, new String[] { table });
 	}
+
 
 	/**
 	 * Constructs a new projection operator.
 	 * @param op operator to pull from
 	 * @param columns column names that will be projected
 	 */
-	public Project(final Operator op, final String[] columns) {
+	public Project(final Operator op, final String[] columns, final String[] tables) {
 		this.op = op;
 		this.columns = columns;
+		this.tables = tables;
+		
+		this.opSchema = op.getSchema();
+		
+		Integer[] columnSize = new Integer[columns.length];
+		String[] columnTable = new String[columns.length];
+		Integer[] columnType = new Integer[columns.length];
+		
+		for(int i = 0; i < columns.length; i++){
+			System.out.println("request index: " + columns[i] + " " + tables[i]);
+			int index = opSchema.getIndex(columns[i], tables[i]);
+			columnSize[i] = opSchema.getSize(index);
+			columnTable[i] = opSchema.getTableName(index);
+			columnType[i] = opSchema.getType(index);
+		}
 
-		this.first = true;
+		this.schema = new TupleSchema(columns, columnSize, columnTable, columnType);
 	}
-
+	//else System.out.println("fdsa");
 	@Override
 	public boolean moveNext() throws IOException {
 		// TODO
@@ -50,23 +67,8 @@ public final class Project extends Operator {
 		List<String> result = new ArrayList<String>();
 		
 		if (op.moveNext()){
-
-			if (first){
-				this.opSchema = op.current.getSchema();
-				
-				Integer[] columnsize = new Integer[columns.length];
-				
-				int index = 0;
-				for(String column:columns){
-					columnsize[index] = opSchema.getSize(column);
-				}
-
-				this.schema = new TupleSchema(columns, columnsize);
-				first = false;
-			}
-
-			for (String column:columns){
-				int index = opSchema.getIndex(column); 
+			for (int i = 0; i < columns.length; i++){
+				int index = opSchema.getIndex(columns[i], tables[i]); 
 				if (index >= 0){
 					result.add(op.current.get(index));
 				}
@@ -90,7 +92,17 @@ public final class Project extends Operator {
 
 	@Override
 	public TupleSchema getSchema() {
-		// TODO Auto-generated method stub
-		return null;
+		return schema;
+	}
+
+	@Override
+	public int getoffset() {
+		return op.getoffset();
+	}
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "ProjectNode: Tables: " + Arrays.toString(tables)+ ", Columns: " + Arrays.toString(columns));
+		op.printTree(depth + 1);
 	}
 }

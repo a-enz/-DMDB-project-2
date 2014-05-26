@@ -8,34 +8,33 @@ import com.foundationdb.sql.parser.Visitor;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
-public class ColumnRef implements Extractor, Printable{
-	private String column;
-	private String table;
+public class Constant implements Extractor, Printable{
+
+	private Value value;
 	
-	public ColumnRef(String column, String table){
-		this.column = column;
-		this.table = table;
-	}
-	
-	public Value getValue(Tuple tuple) {
+	public Constant(String val, int type){
 		try {
-			return new Value(tuple.get(column, table), tuple.getType(column, table));
+			value = new Value(val, type);
 		} catch (ParseException e) {
 			e.printStackTrace();
-			return null;
 		}
 	}
 	
+	@Override
+	public Value getValue(Tuple tuple) {
+		return value;
+	}
 
 	@Override
 	public Visitable accept(Visitor v) throws StandardException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void printTree(int depth) {
-		System.out.println(Helper.indent(depth) + "ColumnRefNode: " + table + "/" + column);
+		System.out.println(Helper.indent(depth) + "ConstantNode");
+		value.printTree(depth + 1);
 	}
-	
-	
+
 }

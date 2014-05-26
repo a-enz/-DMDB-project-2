@@ -17,6 +17,7 @@ import java.io.Reader;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Helper;
 
 
 /**
@@ -28,31 +29,36 @@ public class Scan extends Operator {
 	private final RandomAccessFile reader;
 	private final TupleSchema schema;
 	private final String fileName;
+	private final String tableName;
 	private byte[] buffer;
+	private final String DBPATH = "/home/daniel/Documents/DMDB/";
+	private final String EXTENSION = ".txt";
+	private int offset;
 	
-	private int blocksize = 1024;
 
-	
 	/**
 	 * Contructs a new scan operator.
 	 * @param fileName file to read tuples from
 	 * @throws IOException 
 	 */
-	public Scan(final String fileName) throws IOException {
+	public Scan(final String tableName) throws IOException {
 		// read from file
+		fileName = tableName + EXTENSION;
 		RandomAccessFile reader = null;
 		try {
-			reader = new RandomAccessFile (fileName, "rw");
+			reader = new RandomAccessFile (DBPATH + fileName, "rw");
 		} catch (final FileNotFoundException e) {
+			System.out.println("File not found: " + fileName);
 			throw new RuntimeException("could not find file " + fileName);
 		}
 		this.reader = reader;
-		this.fileName = fileName;
+		this.tableName = tableName;
 		this.buffer = new byte[blocksize];
 		// create schema
 		String[] columnNames;
 		try{
 			reader.read(buffer);
+			offset += blocksize;
 			columnNames = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column name: " + this.reader + 
@@ -62,14 +68,103 @@ public class Scan extends Operator {
 		String[] columnSize;
 		try{
 			reader.read(buffer);
+			offset += blocksize;
 			columnSize = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column size: " + this.reader + 
 					". Error is " + e);
 		}
 		
+		String[] tableNames = new String[columnSize.length];
+		
+		for (int i = 0; i < tableNames.length; i++){
+			tableNames[i] = this.tableName;
+		}
+		
+		String[] columnType;
+		try{
+			reader.read(buffer);
+			offset += blocksize;
+			columnType = parseLine(buffer).split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read column type: " + this.reader + 
+					". Error is " + e);
+		}
 
-		this.schema = new TupleSchema(columnNames,columnSize);
+		this.schema = new TupleSchema (columnNames, columnSize, tableNames, columnType);
+		
+		//========== For testing purposes=============
+		
+//		for (String s:columnNames){
+//			System.out.println("columnName: " + s);
+//		}
+		
+//		for (String s:tableNames){
+//		System.out.println("columnTable: " + s);
+//	}
+//		
+//		for (String s:columnSize){
+//		System.out.println("columnSizes: " + s);
+//	}
+		
+//		for (String s:columnType){
+//		System.out.println("columnTypes: " + s);
+//	}
+		
+		//============================================
+	}
+	
+	public Scan(final String tableName, final String correlation) throws IOException {
+		// read from file
+		fileName = tableName + EXTENSION;
+		RandomAccessFile reader = null;
+		try {
+			reader = new RandomAccessFile (DBPATH + fileName, "rw");
+		} catch (final FileNotFoundException e) {
+			System.out.println("File not found: " + fileName);
+			throw new RuntimeException("could not find file " + fileName);
+		}
+		this.reader = reader;
+		this.tableName = correlation;
+		this.buffer = new byte[blocksize];
+		// create schema
+		String[] columnNames;
+		try{
+			reader.read(buffer);
+			offset += blocksize;
+			columnNames = parseLine(buffer).split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read column name: " + this.reader + 
+					". Error is " + e);
+		}
+		
+		String[] columnSize;
+		try{
+			reader.read(buffer);
+			offset += blocksize;
+			columnSize = parseLine(buffer).split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read column size: " + this.reader + 
+					". Error is " + e);
+		}
+		
+		String[] tableNames = new String[columnSize.length];
+		
+		for (int i = 0; i < tableNames.length; i++){
+			tableNames[i] = this.tableName;
+		}
+		
+		String[] columnType;
+		try{
+			reader.read(buffer);
+			offset += blocksize;
+			columnType = parseLine(buffer).split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read column type: " + this.reader + 
+					". Error is " + e);
+		}
+
+		this.schema = new TupleSchema (columnNames, columnSize, tableNames, columnType);
 	}
 	
 	public static String parseLine(byte[] data) {
@@ -81,7 +176,7 @@ public class Scan extends Operator {
 	    	  break;
 	      }
 	    }
-	    return cbuf.toString();
+	    return cbuf.toString().toLowerCase();
 	  }
 
 	/**
@@ -94,12 +189,47 @@ public class Scan extends Operator {
 	@Override
 	public boolean moveNext() {
 		
+//		old version
+//		===========
+		
+//		while (reader.getFilePointer() + 1024 < reader.length()){
+//			reader.read(buffer);
+//			offset += blocksize;
+//			String[] schemaValue = parseBuffer(buffer);
+//			this.current = new Tuple(this.schema, schemaValue);
+//			return true;
+//		}
+//		return false;
+		
+		
+		//TODO: we just need to check the first bit (the valid flag!) 
+		
 		try {
-			if (reader.getFilePointer() + 1024 < reader.length()){
+			while (reader.getFilePointer() + 1024 < reader.length()){
 				reader.read(buffer);
+				
+				
+				offset += blocksize;
 				String[] schemaValue = parseBuffer(buffer);
-				this.current = new Tuple(this.schema, schemaValue);
-				return true;
+				
+//				for (String s:schemaValue){
+//					System.out.println("SchemaValue: " + s);
+//				}
+				
+
+				boolean notnullschema = false;
+				
+				for (String s:schemaValue){
+					if(s.length() != 0){
+						notnullschema = true;
+						break;
+					}
+				}
+				
+				if (notnullschema){
+					this.current = new Tuple(this.schema, schemaValue);
+					return true;
+				}
 			}
 			return false;
 			
@@ -129,12 +259,12 @@ public class Scan extends Operator {
 				if (!(b == 0x1b)) {
 			        cbuf.append((char) b);
 			      }else{
-			    	  ret[i] = cbuf.toString();
-			    	  cbuf.delete(0, cbuf.length());
 			    	  break;
 			      }
 				j++;
 			}
+	    	ret[i] = cbuf.toString();
+	    	cbuf.delete(0, cbuf.length());
 			offset += bound;
 		}
 		return ret;
@@ -145,6 +275,10 @@ public class Scan extends Operator {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public String getTableName() {
+		return this.tableName;
+	}
 
 	@Override
 	public String getFileName() {
@@ -153,12 +287,24 @@ public class Scan extends Operator {
 
 	@Override
 	public void reset() throws IOException {
-		reader.seek(blocksize);
+		reader.seek(headerblock*blocksize);
+		offset = headerblock*blocksize;
 	}
 
 	@Override
 	public TupleSchema getSchema() {
 		return schema;
+	}
+
+	@Override
+	public int getoffset() {
+		return offset;
+	}
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "ScanNode: " + fileName);
+		
 	}
 
 }

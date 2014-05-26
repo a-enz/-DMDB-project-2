@@ -6,12 +6,12 @@ import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 
-public class Equals implements Predicate{
+public class Greater implements Predicate{
 	
 	Extractor left;
 	Extractor right;
 	
-	public Equals(Extractor left, Extractor right){
+	public Greater(Extractor left, Extractor right){
 		this.left = left;
 		this.right = right;
 	}
@@ -23,12 +23,13 @@ public class Equals implements Predicate{
 
 	@Override
 	public boolean evaluate(Tuple tuple) {
-		return left.getValue(tuple).equals(right.getValue(tuple));
+		int cmp = left.getValue(tuple).compareTo(right.getValue(tuple));
+		return (cmp > 0);
 	}
 
 	@Override
 	public void printTree(int depth) {
-		System.out.println(Helper.indent(depth) + "EqualsNode");
+		System.out.println(Helper.indent(depth) + "GreaterNode");
 		System.out.println(Helper.indent(depth) + "Left:");
 		left.printTree(depth + 1);
 		System.out.println(Helper.indent(depth) + "Right:");

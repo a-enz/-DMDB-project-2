@@ -18,30 +18,26 @@ public class Sort extends Operator implements Comparator<Tuple> {
 
 	private final Operator op;
 	private final String column;
-	private final boolean ascending;
 	private final ArrayList<Tuple> sortBuffer;
 	private int offset;
+	private final String table;
 	
-	public Sort(final Operator op,final String column,final boolean ascending) {
+	public Sort(final Operator op,final String column, final String table) {
 		this.op = op;
 		this.column = column;
-		this.ascending = ascending;
 		this.sortBuffer = new ArrayList<Tuple>();
+		this.table = table;
 	}
 	
 	@Override
 	public final int compare(final Tuple l, final Tuple r) {
 		
-		final int columnIndex = l.getSchema().getIndex(this.column);
+		final int columnIndex = l.getSchema().getIndex(this.column, this.table);
 		
 		final int result = 
 			l.get(columnIndex).compareToIgnoreCase(r.get(columnIndex));
 		
-		if (this.ascending) {
-			return result;
-		} else {
-			return -result;
-		}
+		return result;
 	}
 
 	@Override
@@ -84,14 +80,24 @@ public class Sort extends Operator implements Comparator<Tuple> {
 
 	@Override
 	public void reset() throws IOException {
-		// TODO Auto-generated method stub
+		op.reset();
 		
 	}
 
 	@Override
 	public TupleSchema getSchema() {
+		return op.getSchema();
+	}
+
+	@Override
+	public int getoffset() {
+		return op.getoffset();
+	}
+
+	@Override
+	public void printTree(int depth) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	

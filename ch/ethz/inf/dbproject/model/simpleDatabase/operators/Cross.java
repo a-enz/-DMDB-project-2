@@ -11,6 +11,7 @@ import java.io.StringReader;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Helper;
 
 
 /**
@@ -23,8 +24,8 @@ public class Cross extends Operator {
 	private final Operator op2;	
 	private final TupleSchema schema;
 	
-	private String read1;
-	private String read2;
+	private String read1[];
+	private String read2[];
 	
 	private boolean op1next;
 
@@ -61,7 +62,8 @@ public class Cross extends Operator {
 	 */
 
 	
-	public Cross(final Operator op1, final Operator op2) throws IOException {
+	public Cross(final Operator op1, final Operator op2) throws IOException
+	{
 		this.op1 = op1;
 		this.op2 = op2;
 		
@@ -70,9 +72,11 @@ public class Cross extends Operator {
 		
 		String[] columnNames = concat(tuple1.getAllNames(), tuple2.getAllNames());
 		Integer[] columnSizes = concat(tuple1.getAllSize(), tuple2.getAllSize());
+		String[] columnTable = concat(tuple1.getAllTables(), tuple2.getAllTables());
+		Integer[] columnTypes = concat(tuple1.getAllType(), tuple2.getAllType());
 
 		
-		this.schema = new TupleSchema(columnNames, columnSizes);
+		this.schema = new TupleSchema(columnNames, columnSizes, columnTable, columnTypes);
 		
 		op1next = op1.moveNext();
 	}
@@ -91,16 +95,29 @@ public class Cross extends Operator {
 
 	@Override
 	public boolean moveNext() throws IOException {
+		if (op1.current == null && op1.moveNext() == false){
+			return false;
+		}
+		
 		if(op2.moveNext()){
-			
+			read1 = op1.current.getValue();
+			read2 = op2.current.getValue();
+			current = new Tuple(schema, concat(read1,read2));
+			return true;
 		}
 		else{
 			if(op1.moveNext()){
 				op2.reset();
-				op2.moveNext();
+				if(op2.moveNext()){
+					read1 = op1.current.getValue();
+					read2 = op2.current.getValue();
+					current = new Tuple(schema, concat(read1,read2));
+					return true;
+				}
 			}
 		}
 		return false;
+			
 	}
 
 	@Override
@@ -117,5 +134,21 @@ public class Cross extends Operator {
 	@Override
 	public TupleSchema getSchema() {
 		return schema;
+	}
+
+
+	@Override
+	public int getoffset() {
+		return 0;
+	}
+
+
+	@Override
+	public void printTree(int depth) {
+		System.out.println(Helper.indent(depth) + "CrossNode");
+		System.out.println(Helper.indent(depth) + "Left:");
+		op1.printTree(depth + 1);
+		System.out.println(Helper.indent(depth) + "Right:");
+		op2.printTree(depth + 1);
 	}
 }

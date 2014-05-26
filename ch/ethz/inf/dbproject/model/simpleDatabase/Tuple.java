@@ -13,6 +13,7 @@ public class Tuple {
 
 	private final TupleSchema schema;
 	private final String[] values;
+	
 
 	public Tuple(final TupleSchema schema, final String[] values) {
 		this.schema = schema;
@@ -25,6 +26,16 @@ public class Tuple {
 
 	public final String get(final int index) {
 		return this.values[index];
+	}
+	
+	public final String get(final String column, final String table){
+		int index = this.schema.getIndex(column, table);
+		//System.out.println(column + " " + table + " " + index + " " + values[index] + " " + schema.getType(index));
+		return this.values[index];
+	}
+	
+	public final int getType(final String column, final String table){
+		return this.getSchema().getType(column, table);
 	}
 
 	public final short getShort(final int index) {
@@ -47,6 +58,10 @@ public class Tuple {
 	// You may add other custom type getters here
 	// i.e. Date, Time
 	
+	public final String[] getValue(){
+		return values;
+	}
+	
 	public final String toString() {
 		final StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {
@@ -56,6 +71,24 @@ public class Tuple {
 			}
 		}
 		return buf.toString();
+	}
+	
+	public boolean equals(Object other){
+		Tuple otherTuple = (Tuple) other;
+		int length1 = otherTuple.values.length;
+		int length2 = this.values.length;
+		if (length1 != length2){
+			return false;
+		}
+		for (int i = 0; i < length1 && i < length2; i++){
+			if (!otherTuple.values[i].equals(this.values[i])){
+				return false;
+			}
+		}
+		if (!otherTuple.schema.equals(this.schema)){
+			return false;
+		}
+		return true;
 	}
 
 }
