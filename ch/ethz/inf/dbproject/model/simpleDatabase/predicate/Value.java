@@ -13,6 +13,7 @@ public class Value implements Comparable<Value>, Printable{
 	public static final int DOUBLE = 3;
 	public static final int DATE = 4;
 	
+	protected String val;
 	protected String s;
 	protected int n;
 	protected float f;
@@ -23,6 +24,7 @@ public class Value implements Comparable<Value>, Printable{
 	
 	public Value(String val, int type) throws ParseException {
 		SimpleDateFormat date = new SimpleDateFormat();
+		this.val = val;
 		switch (type) {
 			case STRING:
 				s = val;
@@ -48,7 +50,8 @@ public class Value implements Comparable<Value>, Printable{
 	public final int compareTo(Value val) {
 		Double left = getNumerical();
 		Double right = val.getNumerical();
-		if(left != null && right != null) return left.compareTo(right);		//numerical comparison
+		System.out.println("asdfasdf: " + left.compareTo(right)); 
+		if(left != null && right != null)  {return left.compareTo(right);}		//numerical comparison
 		else if(type == STRING && val.getType() == STRING) return s.compareTo(val.getString());		//string comparison
 		else if(type == DATE && val.getType() == DATE) return da.compareTo(val.getDate());
 		else return -1;		//TODO throw exception or something
@@ -134,5 +137,9 @@ public class Value implements Comparable<Value>, Printable{
 				break;
 		}
 		System.out.println(Helper.indent(depth) + "ValueNode: " + val + ", Type: " + type);
+	}
+	
+	public String toString() {
+		return "Value: " + val + ", Type: " + type;
 	}
 }
