@@ -72,5 +72,23 @@ public class Tuple {
 		}
 		return buf.toString();
 	}
+	
+	public boolean equals(Object other){
+		Tuple otherTuple = (Tuple) other;
+		int length1 = otherTuple.values.length;
+		int length2 = this.values.length;
+		if (length1 != length2){
+			return false;
+		}
+		for (int i = 0; i < length1 && i < length2; i++){
+			if (!otherTuple.values[i].equals(this.values[i])){
+				return false;
+			}
+		}
+		if (!otherTuple.schema.equals(this.schema)){
+			return false;
+		}
+		return true;
+	}
 
 }

@@ -7,9 +7,6 @@ import java.io.*;
 public class MyDatabase {
 	
 	public Statement createStatement(){
-		return null;
+		return new Statement();
 	}
-	
-	//TODO: Store all the File we have
-
 }

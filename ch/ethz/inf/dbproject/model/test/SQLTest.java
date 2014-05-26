@@ -33,9 +33,6 @@ public class SQLTest {
 		System.out.println("Class: " + visit.getClass().toString());
 		project = (Project) visit;
 		project.printTree(0);
-		
-		
-		System.out.println(project.moveNext());
 	}
 	
 	public static void main(String[] args) throws StandardException, IOException {
