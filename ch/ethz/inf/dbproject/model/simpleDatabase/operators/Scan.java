@@ -135,12 +135,13 @@ public class Scan extends Operator {
 			while (reader.getFilePointer() + 1024 < reader.length()){
 				reader.read(buffer);
 				
+				
 				offset += blocksize;
 				String[] schemaValue = parseBuffer(buffer);
 				
-				for (String s:schemaValue){
-					System.out.println("SchemaValue: " + s);
-				}
+//				for (String s:schemaValue){
+//					System.out.println("SchemaValue: " + s);
+//				}
 				
 
 				boolean notnullschema = false;
