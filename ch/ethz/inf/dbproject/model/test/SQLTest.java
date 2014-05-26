@@ -32,6 +32,7 @@ public class SQLTest {
 		visit = visitor.visit(node);
 		System.out.println("Class: " + visit.getClass().toString());
 		project = (Project) visit;
+		System.out.println("Next: " + project.moveNext());
 		project.printTree(0);
 	}
 	

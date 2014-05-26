@@ -144,10 +144,11 @@ public class TupleSchema {
 		
 		List<String> result = new ArrayList<String>();
 		for (ColumnInfo columninfo:columnInfos){
-			if (columninfo.getTableName() == table){
+			if (columninfo.getTableName().equals(table)){
 				result.add(columninfo.getColumnName());
 			}
 		}
+		System.out.println("SchemaSchema: " + Arrays.toString(columnInfos));
 		return result.toArray(new String[result.size()]);
 	}
 

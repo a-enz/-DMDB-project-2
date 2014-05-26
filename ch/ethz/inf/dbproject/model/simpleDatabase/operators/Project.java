@@ -57,7 +57,7 @@ public final class Project extends Operator {
 
 		this.schema = new TupleSchema(columns, columnSize, columnTable, columnType);
 	}
-
+	//else System.out.println("fdsa");
 	@Override
 	public boolean moveNext() throws IOException {
 		// TODO
@@ -102,7 +102,7 @@ public final class Project extends Operator {
 
 	@Override
 	public void printTree(int depth) {
-		System.out.println(Helper.indent(depth) + "ProjectNode: Tables: " + tables.toString() + ", Columns: " + columns.toString());
+		System.out.println(Helper.indent(depth) + "ProjectNode: Tables: " + Arrays.toString(tables)+ ", Columns: " + Arrays.toString(columns));
 		op.printTree(depth + 1);
 	}
 }
