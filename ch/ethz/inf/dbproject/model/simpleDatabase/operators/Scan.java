@@ -114,6 +114,59 @@ public class Scan extends Operator {
 		//============================================
 	}
 	
+	public Scan(final String tableName, final String correlation) throws IOException {
+		// read from file
+		fileName = tableName + EXTENSION;
+		RandomAccessFile reader = null;
+		try {
+			reader = new RandomAccessFile (DBPATH + fileName, "rw");
+		} catch (final FileNotFoundException e) {
+			System.out.println("File not found: " + fileName);
+			throw new RuntimeException("could not find file " + fileName);
+		}
+		this.reader = reader;
+		this.tableName = correlation;
+		this.buffer = new byte[blocksize];
+		// create schema
+		String[] columnNames;
+		try{
+			reader.read(buffer);
+			offset += blocksize;
+			columnNames = parseLine(buffer).split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read column name: " + this.reader + 
+					". Error is " + e);
+		}
+		
+		String[] columnSize;
+		try{
+			reader.read(buffer);
+			offset += blocksize;
+			columnSize = parseLine(buffer).split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read column size: " + this.reader + 
+					". Error is " + e);
+		}
+		
+		String[] tableNames = new String[columnSize.length];
+		
+		for (int i = 0; i < tableNames.length; i++){
+			tableNames[i] = this.tableName;
+		}
+		
+		String[] columnType;
+		try{
+			reader.read(buffer);
+			offset += blocksize;
+			columnType = parseLine(buffer).split(",");
+		} catch (final IOException e){
+			throw new RuntimeException("could not read column type: " + this.reader + 
+					". Error is " + e);
+		}
+
+		this.schema = new TupleSchema (columnNames, columnSize, tableNames, columnType);
+	}
+	
 	public static String parseLine(byte[] data) {
 	    StringBuilder cbuf = new StringBuilder();
 	    for (byte b : data) {

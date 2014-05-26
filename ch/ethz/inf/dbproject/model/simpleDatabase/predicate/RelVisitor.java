@@ -124,7 +124,7 @@ public class RelVisitor implements Visitor{
 		try {
 			while(cursor.hasNext()) {							//get all fromtables
 				current = cursor.next();
-				scanList.add(new Scan(current.getOrigTableName().toString()));
+				scanList.add(new Scan(current.getOrigTableName().toString(), current.getCorrelationName()));
 			}
 			
 			if(scanList.size() > 1) {							//cross that shit if more than one source
