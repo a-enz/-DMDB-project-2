@@ -139,9 +139,9 @@ public class Scan extends Operator {
 				offset += blocksize;
 				String[] schemaValue = parseBuffer(buffer);
 				
-//				for (String s:schemaValue){
-//					System.out.println("SchemaValue: " + s);
-//				}
+				for (String s:schemaValue){
+					System.out.println("SchemaValue: " + s);
+				}
 				
 
 				boolean notnullschema = false;
@@ -186,12 +186,12 @@ public class Scan extends Operator {
 				if (!(b == 0x1b)) {
 			        cbuf.append((char) b);
 			      }else{
-			    	  ret[i] = cbuf.toString();
-			    	  cbuf.delete(0, cbuf.length());
 			    	  break;
 			      }
 				j++;
 			}
+	    	ret[i] = cbuf.toString();
+	    	cbuf.delete(0, cbuf.length());
 			offset += bound;
 		}
 		return ret;
