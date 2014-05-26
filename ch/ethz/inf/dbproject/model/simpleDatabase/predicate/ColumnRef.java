@@ -21,7 +21,7 @@ public class ColumnRef implements Extractor, Printable{
 	
 	public Value getValue(Tuple tuple) {
 		try {
-			return new Value(column, type);
+			return new Value(tuple.get(column, table), type);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;

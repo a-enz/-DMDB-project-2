@@ -92,7 +92,7 @@ public class RelVisitor implements Visitor{
 			//e.printStackTrace();
 		}
 		
-		return new ColumnRef(table, column, type);
+		return new ColumnRef(column, table, type);
 	}
 
 	@Override

@@ -27,6 +27,12 @@ public class Tuple {
 	public final String get(final int index) {
 		return this.values[index];
 	}
+	
+	public final String get(final String column, final String table){
+		int index = this.getSchema().getIndex(column, table);
+		System.out.println(column + " " + table + " " + index);
+		return this.values[index];
+	}
 
 	public final short getShort(final int index) {
 		return Short.parseShort(this.values[index]);
