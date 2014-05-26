@@ -21,6 +21,8 @@ import com.foundationdb.sql.parser.DeleteNode;
 import com.foundationdb.sql.parser.FromTable;
 import com.foundationdb.sql.parser.NumericConstantNode;
 import com.foundationdb.sql.parser.OrNode;
+import com.foundationdb.sql.parser.OrderByColumn;
+import com.foundationdb.sql.parser.OrderByList;
 import com.foundationdb.sql.parser.ResultColumn;
 import com.foundationdb.sql.parser.ResultColumnList;
 import com.foundationdb.sql.parser.SelectNode;
@@ -101,7 +103,12 @@ public class RelVisitor implements Visitor{
 
 	@Override
 	public Visitable visit(CursorNode node) throws StandardException {
-		return node.getResultSetNode().accept(this);
+		OrderByList obl = node.getOrderByList();
+		if(obl == null) return node.getResultSetNode().accept(this);
+		else {
+			System.out.println("OrderBy: " + obl.get(0).getExpression().getColumnName() + ", " + obl.get(0).getExpression().getTableName());
+			return new Sort((Operator) node.getResultSetNode().accept(this), obl.get(0).getExpression().getColumnName(), obl.get(0).getExpression().getTableName());
+		}
 	}
 
 	//magic happens here
@@ -164,7 +171,7 @@ public class RelVisitor implements Visitor{
 				rColumns.add(rCurrent.getExpression().getColumnName());
 			}
 		}
-
+		
 		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
 		node.getResultColumns().accept(this);
 		Select select = new Select(arg, predicate);
