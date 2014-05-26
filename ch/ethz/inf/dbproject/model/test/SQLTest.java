@@ -20,7 +20,8 @@ public class SQLTest {
 	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
 
-	private String arg="SELECT FirstName, SurName FROM Person WHERE PersonID = 0";
+	private String arg="SELECT ca.* FROM Cases ca WHERE CaseNr=1";
+
 
 	public SQLTest() throws StandardException, IOException {
 		parser = new SQLParser();
@@ -31,7 +32,11 @@ public class SQLTest {
 		System.out.println("Class: " + visit.getClass().toString());
 		project = (Project) visit;
 		project.printTree(0);
+<<<<<<< HEAD
 		System.out.println(project.moveNext());
+=======
+		System.out.println("Tuple: " + project.current());
+>>>>>>> fc389c39cab8c624f0ddb9f88d92c271065c0eaa
 	}
 	
 	public static void main(String[] args) throws StandardException, IOException {
