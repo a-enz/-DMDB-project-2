@@ -154,6 +154,7 @@ public class ColumnReference extends ValueNode
      *
      * @return The name of this column
      */
+    
 
     public String getColumnName() {
         return columnName;

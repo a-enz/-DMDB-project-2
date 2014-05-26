@@ -18,6 +18,7 @@ public class Value implements Comparable<Value>, Printable{
 	protected float f;
 	protected double d;
 	protected Date da;
+	protected String val;
 	
 	protected int type;
 	
@@ -43,6 +44,7 @@ public class Value implements Comparable<Value>, Printable{
 				break;
 		}
 		this.type = type;
+		this.val = val;
 	}
 	
 	public final int compareTo(Value val) {
@@ -52,6 +54,15 @@ public class Value implements Comparable<Value>, Printable{
 		else if(type == STRING && val.getType() == STRING) return s.compareTo(val.getString());		//string comparison
 		else if(type == DATE && val.getType() == DATE) return da.compareTo(val.getDate());
 		else return -1;		//TODO throw exception or something
+	}
+	
+	public final boolean equals(Object other){
+		Value otherval = (Value) other;
+		return otherval.getVal().equals(this.getVal());
+	}
+	
+	private String getVal(){
+		return this.val;
 	}
 	
 	private Date getDate() {

@@ -20,7 +20,7 @@ public class SQLTest {
 	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
 
-	private String arg="SELECT Title FROM Cases WHERE CaseNr=1 ORDER BY Title ASC";
+	private String arg="SELECT Title FROM Cases WHERE CaseNr=1";
 
 	public SQLTest() throws StandardException, IOException {
 		parser = new SQLParser();
@@ -34,9 +34,7 @@ public class SQLTest {
 		project = (Project) visit;
 		project.printTree(0);
 		
-		for (String s:project.getSchema().getAllNames()){
-			System.out.println("columnName: " + s);
-		}
+		
 		System.out.println(project.moveNext());
 	}
 	

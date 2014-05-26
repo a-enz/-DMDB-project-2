@@ -31,7 +31,7 @@ public class Scan extends Operator {
 	private final String fileName;
 	private final String tableName;
 	private byte[] buffer;
-	private final String DBPATH = "/home/mlei/workspace/database/";
+	private final String DBPATH = "/home/daniel/Documents/DMDB/";
 	private final String EXTENSION = ".txt";
 	private int offset;
 	
@@ -99,13 +99,17 @@ public class Scan extends Operator {
 //			System.out.println("columnName: " + s);
 //		}
 		
-		for (String s:tableNames){
-		System.out.println("columnTable: " + s);
-	}
-		
+//		for (String s:tableNames){
+//		System.out.println("columnTable: " + s);
+//	}
+//		
 //		for (String s:columnSize){
 //		System.out.println("columnSizes: " + s);
 //	}
+		
+		for (String s:columnType){
+		System.out.println("columnTypes: " + s);
+	}
 		
 		//============================================
 	}
@@ -155,9 +159,9 @@ public class Scan extends Operator {
 				offset += blocksize;
 				String[] schemaValue = parseBuffer(buffer);
 				
-				for (String s:schemaValue){
-					System.out.println("SchemaValue: " + s);
-				}
+//				for (String s:schemaValue){
+//					System.out.println("SchemaValue: " + s);
+//				}
 				
 
 				boolean notnullschema = false;
