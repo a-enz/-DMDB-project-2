@@ -34,10 +34,6 @@ public class SQLTest {
 		project = (Project) visit;
 		project.printTree(0);
 		
-		if (project.getSchema() == null){
-			System.out.println("AAAAh...");
-		}
-		
 		for (String s:project.getSchema().getAllNames()){
 			System.out.println("columnName: " + s);
 		}
