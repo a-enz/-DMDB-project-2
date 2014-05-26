@@ -31,7 +31,6 @@ public class Statement{
 	}
 	
 	
-	
 	public void executeUpdate(String statement){
 		//TODO: to implement
 	}
