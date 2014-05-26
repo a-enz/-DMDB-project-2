@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
@@ -150,7 +151,11 @@ public class RelVisitor implements Visitor{
 			rCurrent = rCursor.next();
 			if (rCurrent instanceof AllResultColumn) {
 				tmp = arg.getSchema().getAllColumnNamesByTable(((AllResultColumn) rCurrent).getFullTableName());
-				System.out.println("tmp: " + ((AllResultColumn) rCurrent).getFullTableName());
+				for(String s : tmp){
+					rColumns.add(s);
+				}
+				//System.out.println("Schema: " + )
+				System.out.println("tableName: " + ((AllResultColumn) rCurrent).getFullTableName() + ", " + Arrays.toString(tmp));
 				for(int i = 0; i < tmp.length; i++) {
 					rTables.add(((AllResultColumn) rCurrent).getFullTableName());
 				}
@@ -163,6 +168,7 @@ public class RelVisitor implements Visitor{
 		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
 		node.getResultColumns().accept(this);
 		Select select = new Select(arg, predicate);
+		System.out.println("Columns: " + rColumns.toString()+ ", Tables: " + rTables.toString());
 		Project project = new Project(select, rColumns.toArray(new String[rTables.size()]), rTables.toArray(new String[rTables.size()]));
 		return project;
 	}
