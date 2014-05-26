@@ -20,7 +20,7 @@ public class SQLTest {
 	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
 
-	private String arg="SELECT ca.* FROM Cases ca WHERE CaseNr=1";
+	private String arg="SELECT Person.* FROM Person WHERE PersonID = 0";
 
 
 	public SQLTest() throws StandardException, IOException {

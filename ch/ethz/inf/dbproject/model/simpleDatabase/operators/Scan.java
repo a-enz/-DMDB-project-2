@@ -125,7 +125,12 @@ public class Scan extends Operator {
 			throw new RuntimeException("could not find file " + fileName);
 		}
 		this.reader = reader;
-		this.tableName = correlation;
+		if (correlation == null || correlation.equals("")){
+			this.tableName = tableName;
+		}
+		else{
+			this.tableName = correlation;
+		}
 		this.buffer = new byte[blocksize];
 		// create schema
 		String[] columnNames;
