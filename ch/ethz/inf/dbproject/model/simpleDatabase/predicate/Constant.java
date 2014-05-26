@@ -34,6 +34,7 @@ public class Constant implements Extractor, Printable{
 	@Override
 	public void printTree(int depth) {
 		System.out.println(Helper.indent(depth) + "ConstantNode");
+		value.printTree(depth + 1);
 	}
 
 }

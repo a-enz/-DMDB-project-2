@@ -31,7 +31,7 @@ public class Scan extends Operator {
 	private final String fileName;
 	private final String tableName;
 	private byte[] buffer;
-	private final String DBPATH = "/home/daniel/Documents/DMDB/";
+	private final String DBPATH = "/home/mlei/workspace/database/";
 	private final String EXTENSION = ".txt";
 	private int offset;
 	
