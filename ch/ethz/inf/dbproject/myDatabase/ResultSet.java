@@ -17,12 +17,12 @@ public class ResultSet {
 	}
 	
 	public int getInt(final String column){
-		int index = op.current().getSchema().getIndex(column);
+		int index = op.current().getSchema().getIndex(column,"");
 		return op.current().getInt(index);
 	}
 	
 	public String getString(final String column){
-		int index = op.current().getSchema().getIndex(column);
+		int index = op.current().getSchema().getIndex(column,"");
 		return op.current().get(index);
 	}
 	

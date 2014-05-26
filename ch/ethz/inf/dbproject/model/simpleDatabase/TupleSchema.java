@@ -51,7 +51,7 @@ public class TupleSchema {
 		int uniqueindex = -1;
 		String[] columnNames = this.getAllNames();
 		for (int i = 0; i < columnNames.length; i++){
-			if (columnNames[i].equals(column)){
+			if (columnNames[i].equals(column.toLowerCase())){
 				amount++;
 				uniqueindex = i;
 			}
@@ -60,7 +60,7 @@ public class TupleSchema {
 			return uniqueindex;
 		}
 		
-		ColumnInfo key = new ColumnInfo(column, table);
+		ColumnInfo key = new ColumnInfo(column.toLowerCase(), table);
 		final Integer index = map.get(key);
 		if (index == null) {
 			return -1; // error

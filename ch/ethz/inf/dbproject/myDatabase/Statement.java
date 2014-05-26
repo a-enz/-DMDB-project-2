@@ -1,76 +1,47 @@
 package ch.ethz.inf.dbproject.myDatabase;
 
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Project;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.RelVisitor;
 import ch.ethz.inf.dbproject.myDatabase.*;
 
 import java.util.*;
 import java.lang.StringBuilder;
 
+import com.foundationdb.sql.StandardException;
+import com.foundationdb.sql.parser.SQLParser;
+import com.foundationdb.sql.parser.StatementNode;
+import com.foundationdb.sql.parser.Visitable;
+
 
 public class Statement{
 	
-	private ResultSet result;
-	private List<String> column;
+	private SQLParser parser;
+	private RelVisitor visitor;
+	private StatementNode node;
+	private Project project;
+	private Visitable visit;
 	
-	public Statement(){
-	 column = new ArrayList<String>();
+	public ResultSet executeQuery(String statement) throws StandardException{
+		parser = new SQLParser();
+		node = parser.parseStatement(statement);
+		visitor = new RelVisitor();
+		visit = visitor.visit(node);
+		project = (Project) visit;
+		return new ResultSet(project);
 	}
 	
-	public ResultSet executeQuery(String statement){
-		visit(statement);
-		return result;
-	}
 	
-	public void visit(String statement){
-		StringBuilder statementBuilder = new StringBuilder(statement);
-		String word = getNextWordSpace(new StringBuilder(statementBuilder));
-		if (word.equalsIgnoreCase("SELECT")){
-			//TODO: parse all the column
-		}
-		else{
-			throw new IllegalArgumentException( "Couldn't find a SELECT clause." );
-		}
-		if (word.equalsIgnoreCase("FROM")){
-		}
-	}
 	
-	public ResultSet getResultSet(){
-		return result;
-	}
-	
-	public List<String> getColumn(){
-		return column;
-	}
-	
-	public String getNextWordSpace(StringBuilder string){
-		int i = string.indexOf(" ");
-		String word;
-		if (i>0){
-			word = string.substring(0, i);
-			string.delete(0, i+1);
-		}
-		else{
-			word = string.toString();
-			string.delete(0, string.length());
-		}
-		return word;
-	}
-	
-	public void setcolumn(StringBuilder string){
-		String word = getNextWordSpace(string);
-		while(word.charAt(word.length()-1) == ','){
-			column.add(word.substring(0,word.length()-1));
-			word = getNextWordSpace(string);
-		}
-		column.add(word);
-	}
-	
-	//TODO implement all of the below
-	public ResultSet executeUpdate(String statement){
-		return null;
+	public void executeUpdate(String statement){
+		//TODO: to implement
 	}
 	
 	public void close(){
-		
+		parser = null;
+		visitor = null;
+		node = null;
+		project = null;
+		visit = null;
 	}
 	
 	public boolean execute(String statement){

@@ -99,50 +99,15 @@ public class Part2Test {
 		assertEquals(expected,actual);
 	}
 	
-//	@Test
-//	public void testGetCaseById() throws IOException{
-//		System.out.println("----------testGetCaseById--------");
-//		DatastoreInterface dbInterface = new DatastoreInterfaceSimpleDatabase();
-//		Case ca = dbInterface.getCaseById(2);
-//		String expected = "Mathias,2,blo,2";
-//		String actual = ca.toString();
-//		System.out.println("=" + expected + "=");
-//		System.out.println("=" + actual + "=");
-//		assertEquals(expected,actual);
-//	}
-	
 	@Test
-	public void testStatementNextWord(){		
-		Statement stmt = new Statement();
-		
-		String expected = "Hello";
-		StringBuilder input = new StringBuilder("Hello World, its me, Daniel");
-		String actual = stmt.getNextWordSpace(input);
-		System.out.println("----------testStatement--------");
-		System.out.println("=" + expected + "=");
-		System.out.println("=" + actual + "=");
-		assertEquals(expected,actual);
-	}
-	
-	@Test
-	public void testStatementSetColumn(){		
-		Statement stmt = new Statement();
-		System.out.println("----------testStatementSetColumn--------");		
-		StringBuilder input = new StringBuilder("This, is, just, an, test FROM");
-		stmt.setcolumn(input);
-		for (String str:stmt.getColumn()){
-			System.out.println(str);
-		}
-		System.out.println(input);
-	}
-	
-	@Test
-	public void testSqlParser() throws StandardException{
+	public void testSqlParser() throws StandardException, IOException{
 		System.out.println("------------testSQLStatement-----------");
-		SQLParser parser = new SQLParser();
-		StatementNode stmt = parser.parseStatement("SELECT * FROM Cases WHERE PID = 13");
-		//stmt.accept(new parseVisitor());
-		//stmt.treePrint();
+		MyDatabase mdb = new MyDatabase();
+		Statement stmt = mdb.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT FirstName, SurName FROM Person WHERE PersonID = 0");
+		rs.next();
+		System.out.println(rs.getString("firstname"));
+		System.out.println(rs.getString("surname"));
 	}
 	
 	@Test
