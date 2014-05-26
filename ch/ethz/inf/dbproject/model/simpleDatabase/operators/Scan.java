@@ -135,6 +135,7 @@ public class Scan extends Operator {
 			while (reader.getFilePointer() + 1024 < reader.length()){
 				reader.read(buffer);
 				
+				
 				offset += blocksize;
 				String[] schemaValue = parseBuffer(buffer);
 				
@@ -185,12 +186,12 @@ public class Scan extends Operator {
 				if (!(b == 0x1b)) {
 			        cbuf.append((char) b);
 			      }else{
-			    	  ret[i] = cbuf.toString();
-			    	  cbuf.delete(0, cbuf.length());
 			    	  break;
 			      }
 				j++;
 			}
+	    	ret[i] = cbuf.toString();
+	    	cbuf.delete(0, cbuf.length());
 			offset += bound;
 		}
 		return ret;
