@@ -130,14 +130,14 @@ public class RelVisitor implements Visitor{
 					rTables.add(((AllResultColumn) rCurrent).getTableName());
 				}
 			}
-			rTables.add(rCurrent.getTableName().toString());
-			rColumns.add(rCurrent.getColumnName().toString());
+			rTables.add(rCurrent.getTableName());
+			rColumns.add(rCurrent.getColumnName());
 		}
 		
 		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
 		node.getResultColumns().accept(this);
 		Select select = new Select(arg, predicate);
-		Project project = new Project(select, (String[]) rTables.toArray(), (String[]) rColumns.toArray());
+		Project project = new Project(select, rTables.toArray(new String[rTables.size()]), (String[]) rColumns.toArray(new String[rTables.size()]));
 		return project;
 	}
 	

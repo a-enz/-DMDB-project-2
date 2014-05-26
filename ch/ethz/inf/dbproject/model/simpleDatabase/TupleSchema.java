@@ -22,6 +22,7 @@ public class TupleSchema {
 		map = new HashMap<ColumnInfo,Integer>();
 		
 		for (int i = 0; i < columnNames.length; i++){
+			//System.out.println("columnType: " + columnType[i]);
 			columnInfos[i] = new ColumnInfo(columnNames[i], columnTables[i], Integer.parseInt(columnSize[i]), Integer.parseInt(columnType[i]));
 			map.put(columnInfos[i], i);
 		}
@@ -132,6 +133,10 @@ public class TupleSchema {
 	}
 	
 	public String[] getAllColumnNamesByTable(final String table){
+		if (table == null || table.equals("")){
+			return this.getAllNames();
+		}
+		
 		List<String> result = new ArrayList<String>();
 		for (ColumnInfo columninfo:columnInfos){
 			if (columninfo.getTableName() == table){
