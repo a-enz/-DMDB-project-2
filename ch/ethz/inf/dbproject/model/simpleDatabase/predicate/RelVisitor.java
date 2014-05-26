@@ -16,6 +16,7 @@ import com.foundationdb.sql.parser.CharConstantNode;
 import com.foundationdb.sql.parser.ColumnReference;
 import com.foundationdb.sql.parser.ConstantNode;
 import com.foundationdb.sql.parser.CursorNode;
+import com.foundationdb.sql.parser.DeleteNode;
 import com.foundationdb.sql.parser.FromTable;
 import com.foundationdb.sql.parser.NumericConstantNode;
 import com.foundationdb.sql.parser.ResultColumn;
@@ -40,9 +41,24 @@ public class RelVisitor implements Visitor{
 		else if(node instanceof ColumnReference) return visit((ColumnReference) node);
 		else if(node instanceof ResultColumnList) return visit((ResultColumnList) node);
 		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (FileNotFoundException e){return null;}}
-		else if(node instanceof SelectNode) return visit((SelectNode) node);
+		else if(node instanceof DeleteNode) {try {return visit((DeleteNode) node);} catch (FileNotFoundException e){return null;}}
 		System.out.println("Visit NodeClass: " + node.getClass());
 		return null;
+	}
+	
+	public Visitable visit(DeleteNode node) throws FileNotFoundException, StandardException {
+		Iterator<ResultColumn> cursor = node.getResultSetNode().getResultColumns().iterator();
+		Project project = (Project) node.getResultSetNode().accept(this);
+		ArrayList<String> values = new ArrayList<String>();
+		
+		while(cursor.hasNext()) {
+			String tmp = cursor.next().getExpression().toString();
+			System.out.println("value: " + tmp);
+			values.add(tmp);
+		}
+		
+		Delete delete = new Delete(project, project.getSchema().getAllNames(), project.getSchema().getAllTables(), values.toArray(new String[values.size()]));
+		return delete;
 	}
 	
 	public Visitable visit(ResultColumnList node) {
