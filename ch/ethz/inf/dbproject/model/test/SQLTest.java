@@ -32,11 +32,8 @@ public class SQLTest {
 		System.out.println("Class: " + visit.getClass().toString());
 		project = (Project) visit;
 		project.printTree(0);
-<<<<<<< HEAD
 		System.out.println(project.moveNext());
-=======
-		System.out.println("Tuple: " + project.current());
->>>>>>> fc389c39cab8c624f0ddb9f88d92c271065c0eaa
+
 	}
 	
 	public static void main(String[] args) throws StandardException, IOException {
