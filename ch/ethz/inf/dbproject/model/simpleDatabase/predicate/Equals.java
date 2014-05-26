@@ -23,8 +23,7 @@ public class Equals implements Predicate{
 
 	@Override
 	public boolean evaluate(Tuple tuple) {
-		System.out.println("Equals:" + (left.getValue(tuple) == right.getValue(tuple)) + " " + left.getValue(tuple).toString());
-		return left.getValue(tuple) == right.getValue(tuple);
+		return left.getValue(tuple).equals(right.getValue(tuple));
 	}
 
 	@Override

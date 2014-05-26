@@ -99,12 +99,16 @@ public class Scan extends Operator {
 //			System.out.println("columnName: " + s);
 //		}
 		
-		for (String s:tableNames){
-		System.out.println("columnTable: " + s);
-	}
-		
+//		for (String s:tableNames){
+//		System.out.println("columnTable: " + s);
+//	}
+//		
 //		for (String s:columnSize){
 //		System.out.println("columnSizes: " + s);
+//	}
+		
+//		for (String s:columnType){
+//		System.out.println("columnTypes: " + s);
 //	}
 		
 		//============================================
@@ -155,9 +159,9 @@ public class Scan extends Operator {
 				offset += blocksize;
 				String[] schemaValue = parseBuffer(buffer);
 				
-				for (String s:schemaValue){
-					System.out.println("SchemaValue: " + s);
-				}
+//				for (String s:schemaValue){
+//					System.out.println("SchemaValue: " + s);
+//				}
 				
 
 				boolean notnullschema = false;

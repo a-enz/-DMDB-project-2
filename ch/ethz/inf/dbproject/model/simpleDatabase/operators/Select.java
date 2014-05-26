@@ -70,7 +70,6 @@ public class Select extends Operator {
 			
 		} else {
 			while(!pred.evaluate(t)){
-				System.out.println("Loop: " + pred.evaluate(t) + ", " + t.toString());
 				if(this.op.moveNext()){
 					t = this.op.current();
 				}
