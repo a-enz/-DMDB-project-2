@@ -208,6 +208,7 @@ public class Scan extends Operator {
 	@Override
 	public void reset() throws IOException {
 		reader.seek(headerblock*blocksize);
+		offset = headerblock*blocksize;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import com.foundationdb.sql.parser.NumericConstantNode;
 import com.foundationdb.sql.parser.ResultColumn;
 import com.foundationdb.sql.parser.ResultColumnList;
 import com.foundationdb.sql.parser.SelectNode;
+import com.foundationdb.sql.parser.UpdateNode;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 import com.foundationdb.sql.types.TypeId;
@@ -37,7 +39,7 @@ public class RelVisitor implements Visitor{
 		else if(node instanceof BinaryRelationalOperatorNode) return visit((BinaryRelationalOperatorNode) node);
 		else if(node instanceof ColumnReference) return visit((ColumnReference) node);
 		else if(node instanceof ResultColumnList) return visit((ResultColumnList) node);
-		else if(node instanceof SelectNode) return visit((SelectNode) node);
+		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (FileNotFoundException e){return null;}}
 		else if(node instanceof SelectNode) return visit((SelectNode) node);
 		System.out.println("Visit NodeClass: " + node.getClass());
 		return null;
@@ -45,6 +47,21 @@ public class RelVisitor implements Visitor{
 	
 	public Visitable visit(ResultColumnList node) {
 		return null;
+	}
+	
+	public Visitable visit(UpdateNode node) throws FileNotFoundException, StandardException {
+		Iterator<ResultColumn> cursor = node.getResultSetNode().getResultColumns().iterator();
+		Project project = (Project) node.getResultSetNode().accept(this);
+		ArrayList<String> values = new ArrayList<String>();
+		
+		while(cursor.hasNext()) {
+			String tmp = cursor.next().getExpression().toString();
+			System.out.println("value: " + tmp);
+			values.add(tmp);
+		}
+		
+		Update update = new Update(project, project.getSchema().getAllNames(), project.getSchema().getAllTables(), values.toArray(new String[values.size()]));
+		return update;
 	}
 	
 	

@@ -1,7 +1,7 @@
 package ch.ethz.inf.dbproject.model.test;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.RelVisitor;
-import ch.ethz.inf.dbproject.model.simpleDatabase.dummy.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
 import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.SQLParser;
 import com.foundationdb.sql.parser.StatementNode;
@@ -15,8 +15,10 @@ public class SQLTest {
 	private Select select;
 	private Visitable visit;
 	//private String arg= "Select PersonID, FirstName, SurName, Street, BirthDate, Nationality, Bounty FROM Person WHERE PersonID=12";
-	private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
+	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
+	private String arg="UPDATE Connected SET Role ='perpetrator' WHERE CaseID = 13 AND Role ='suspect'";
+	
 	
 	public SQLTest() throws StandardException {
 		parser = new SQLParser();
