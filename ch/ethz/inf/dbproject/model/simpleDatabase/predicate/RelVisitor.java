@@ -61,7 +61,7 @@ public class RelVisitor implements Visitor{
 			values.add(tmp);
 		}
 		
-		Delete delete = new Delete(project, project.getSchema().getAllNames(), project.getSchema().getAllTables(), values.toArray(new String[values.size()]));
+		Delete delete = new Delete(project);
 		return delete;
 	}
 	

@@ -14,38 +14,21 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 public final class Delete extends Operator {
 
 	private final Operator op;
-	private final String[] columns;
-	private final String[] tables;
-	private final String[] values;
 	private final String fileName;
 	private final RandomAccessFile reader;
 	private final TupleSchema schema;
-
-	/**
-	 * Constructs a new projection operator.
-	 * @param op operator to pull from
-	 * @param column single column name that will be projected
-	 * @throws FileNotFoundException 
-	 */
-	public Delete(final Operator op, final String columns, final String tables, final String[] values) throws FileNotFoundException
-	{
-		this(op, new String[] { columns }, new String[] { tables }, values);
-	}
-
 	/**
 	 * Constructs a new projection operator.
 	 * @param op operator to pull from
 	 * @param columns column names that will be projected
 	 * @throws FileNotFoundException 
 	 */
-	public Delete(final Operator op, final String[] columns, final String[] tables, final String[] values) throws FileNotFoundException {
+	
+	public Delete(final Operator op) throws FileNotFoundException {
 		this.op = op;
-		this.columns = columns;
-		this.tables = tables;
 		this.fileName = op.getFileName();
-		this.values = values;
 		this.schema = op.getSchema();
-		this.reader = new RandomAccessFile(new File(fileName), "rw");
+		this.reader = new RandomAccessFile(new File(DBPATH + fileName), "rw");
 	}
 
 	@Override
@@ -55,12 +38,12 @@ public final class Delete extends Operator {
 		return bool;
 	}
 	
-	public void doUpdate() throws IOException{
+	public void doDelete() throws IOException{
 		while(moveNext()){
 			int offset = op.getoffset();
-			for (int i=0; i< columns.length; i++){
-				int columnoffset = schema.getOffset(columns[i], tables[i]);
-				reader.write(values[i].getBytes(), offset + columnoffset, schema.getSize(columns[i], tables[i]));
+			reader.seek(offset);
+			for (int i = 0; i < blocksize; i++){
+				reader.write((byte) 0x1b);
 			}
 		}
 	}

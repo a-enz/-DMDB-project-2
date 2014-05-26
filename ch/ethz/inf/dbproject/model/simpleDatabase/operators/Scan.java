@@ -31,8 +31,6 @@ public class Scan extends Operator {
 	private final String fileName;
 	private final String tableName;
 	private byte[] buffer;
-	private final String DBPATH = "/home/daniel/Documents/DMDB/";
-	private final String EXTENSION = ".txt";
 	private int offset;
 	
 
@@ -58,7 +56,6 @@ public class Scan extends Operator {
 		String[] columnNames;
 		try{
 			reader.read(buffer);
-			offset += blocksize;
 			columnNames = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column name: " + this.reader + 
@@ -68,7 +65,6 @@ public class Scan extends Operator {
 		String[] columnSize;
 		try{
 			reader.read(buffer);
-			offset += blocksize;
 			columnSize = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column size: " + this.reader + 
@@ -84,13 +80,13 @@ public class Scan extends Operator {
 		String[] columnType;
 		try{
 			reader.read(buffer);
-			offset += blocksize;
 			columnType = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column type: " + this.reader + 
 					". Error is " + e);
 		}
-
+		
+		this.offset = (headerblock-1) * blocksize;
 		this.schema = new TupleSchema (columnNames, columnSize, tableNames, columnType);
 		
 		//========== For testing purposes=============
@@ -293,7 +289,7 @@ public class Scan extends Operator {
 	@Override
 	public void reset() throws IOException {
 		reader.seek(headerblock*blocksize);
-		offset = headerblock*blocksize;
+		offset = (headerblock-1)*blocksize;
 	}
 
 	@Override
