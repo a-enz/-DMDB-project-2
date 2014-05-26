@@ -31,9 +31,9 @@ public class Scan extends Operator {
 	private final String fileName;
 	private final String tableName;
 	private byte[] buffer;
-	private final String DBPATH = "/home/mlei/workspace/database/";
+	private final String DBPATH = "/home/daniel/Documents/DMDB/";
 	private final String EXTENSION = ".txt";
-	private int offset; // TODO: calculate offset and update !!!
+	private int offset;
 	
 
 	/**
@@ -134,8 +134,14 @@ public class Scan extends Operator {
 		try {
 			while (reader.getFilePointer() + 1024 < reader.length()){
 				reader.read(buffer);
+				
 				offset += blocksize;
 				String[] schemaValue = parseBuffer(buffer);
+				
+				for (String s:schemaValue){
+					System.out.println("SchemaValue: " + s);
+				}
+				
 
 				boolean notnullschema = false;
 				
@@ -208,6 +214,7 @@ public class Scan extends Operator {
 	@Override
 	public void reset() throws IOException {
 		reader.seek(headerblock*blocksize);
+		offset = headerblock*blocksize;
 	}
 
 	@Override
