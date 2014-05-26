@@ -30,8 +30,12 @@ public class Tuple {
 	
 	public final String get(final String column, final String table){
 		int index = this.getSchema().getIndex(column, table);
-		System.out.println(column + " " + table + " " + index);
+		//System.out.println(column + " " + table + " " + index + " " + values[index] + " " + schema.getType(index));
 		return this.values[index];
+	}
+	
+	public final int getType(final String column, final String table){
+		return this.getSchema().getType(column, table);
 	}
 
 	public final short getShort(final int index) {

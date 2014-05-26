@@ -124,6 +124,11 @@ public class TupleSchema {
 		return columnInfos[index].getType();
 	}
 	
+	public int getType(final String column, final String table){
+		int index = this.getIndex(column, table);
+		return columnInfos[index].getType();
+	}
+	
 	public Integer[] getAllType(){
 		Integer[] result = new Integer[columnInfos.length];
 		for(int i=0; i<columnInfos.length; i++){
