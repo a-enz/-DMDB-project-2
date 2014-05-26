@@ -104,11 +104,13 @@ public class Part2Test {
 		System.out.println("------------testSQLStatement-----------");
 		MyDatabase mdb = new MyDatabase();
 		Statement stmt = mdb.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT FirstName, SurName FROM Person WHERE PersonID = 0");
-		rs.next();
+		ResultSet rs = stmt.executeQuery("SELECT Person.* FROM Person WHERE PersonID = 0");
+		System.out.println(rs.next());
 		System.out.println(rs.getString("firstname"));
 		System.out.println(rs.getString("surname"));
+		System.out.println(rs.next());
 	}
+	
 	
 	@Test
 	public void testMultiKey(){

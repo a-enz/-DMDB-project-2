@@ -29,13 +29,13 @@ public class Tuple {
 	}
 	
 	public final String get(final String column, final String table){
-		int index = this.getSchema().getIndex(column, table);
+		int index = this.schema.getIndex(column.toLowerCase(), table.toLowerCase());
 		//System.out.println(column + " " + table + " " + index + " " + values[index] + " " + schema.getType(index));
 		return this.values[index];
 	}
 	
 	public final int getType(final String column, final String table){
-		return this.getSchema().getType(column, table);
+		return this.getSchema().getType(column.toLowerCase(), table.toLowerCase());
 	}
 
 	public final short getShort(final int index) {

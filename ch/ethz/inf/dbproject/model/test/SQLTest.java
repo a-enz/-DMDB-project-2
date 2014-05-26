@@ -20,19 +20,18 @@ public class SQLTest {
 	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
 
-	private String arg="SELECT Cases.* FROM Cases WHERE CaseNr=1";
+	private String arg="SELECT FirstName, SurName FROM Person WHERE PersonID = 0";
 
 	public SQLTest() throws StandardException, IOException {
 		parser = new SQLParser();
 		node = parser.parseStatement(arg);
 		node.treePrint(0);
 		visitor = new RelVisitor();
-		if(node == null) System.out.println("asdf");
-		//else System.out.println("fdsa");
 		visit = visitor.visit(node);
 		System.out.println("Class: " + visit.getClass().toString());
 		project = (Project) visit;
 		project.printTree(0);
+		project.moveNext();
 	}
 	
 	public static void main(String[] args) throws StandardException, IOException {
