@@ -110,7 +110,19 @@ public class Part2Test {
 		System.out.println(rs.getString("surname"));
 		System.out.println(rs.next());
 	}
-	
+
+	@Test
+	public void testSqlParser2() throws StandardException, IOException{
+		System.out.println("------------testSQLStatement2-----------");
+		MyDatabase mdb = new MyDatabase();
+		Statement stmt = mdb.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT per.FirstName FROM Person per, Cases ca WHERE per.PersonID = ca.CaseNr");
+		System.out.println(rs.next());
+		System.out.println(rs.getString("firstname"));
+		System.out.println(rs.next());
+		System.out.println(rs.getString("firstname"));
+		System.out.println(rs.next());
+	}
 	
 	@Test
 	public void testMultiKey(){
