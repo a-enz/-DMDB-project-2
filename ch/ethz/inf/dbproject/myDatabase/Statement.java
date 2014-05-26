@@ -31,6 +31,8 @@ public class Statement{
 		}
 		if (word.equalsIgnoreCase("FROM")){
 		}
+		//UPDATE
+		//DELETE
 	}
 	
 	public ResultSet getResultSet(){
@@ -65,8 +67,8 @@ public class Statement{
 	}
 	
 	//TODO implement all of the below
-	public ResultSet executeUpdate(String statement){
-		return null;
+	public int executeUpdate(String statement){
+		return 0;
 	}
 	
 	public void close(){
