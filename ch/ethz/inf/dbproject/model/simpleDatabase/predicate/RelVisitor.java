@@ -135,6 +135,7 @@ public class RelVisitor implements Visitor{
 				}
 				arg = cross;
 			} else {
+				
 				arg = scanList.get(0);
 			}
 		} catch(IOException e){
