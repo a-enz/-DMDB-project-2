@@ -19,6 +19,7 @@ import com.foundationdb.sql.parser.CursorNode;
 import com.foundationdb.sql.parser.DeleteNode;
 import com.foundationdb.sql.parser.FromTable;
 import com.foundationdb.sql.parser.NumericConstantNode;
+import com.foundationdb.sql.parser.OrNode;
 import com.foundationdb.sql.parser.ResultColumn;
 import com.foundationdb.sql.parser.ResultColumnList;
 import com.foundationdb.sql.parser.SelectNode;
@@ -36,12 +37,14 @@ public class RelVisitor implements Visitor{
 		if(node instanceof CursorNode) return visit((CursorNode) node);
 		else if(node instanceof SelectNode) return visit((SelectNode) node);
 		else if(node instanceof AndNode) return visit((AndNode) node);
+		else if(node instanceof OrNode) return visit((OrNode) node);
 		else if(node instanceof ConstantNode) return visit((ConstantNode) node);
 		else if(node instanceof BinaryRelationalOperatorNode) return visit((BinaryRelationalOperatorNode) node);
 		else if(node instanceof ColumnReference) return visit((ColumnReference) node);
 		else if(node instanceof ResultColumnList) return visit((ResultColumnList) node);
 		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (FileNotFoundException e){return null;}}
 		else if(node instanceof DeleteNode) {try {return visit((DeleteNode) node);} catch (FileNotFoundException e){return null;}}
+		//else if(node instanceof )
 		System.out.println("Visit NodeClass: " + node.getClass());
 		return null;
 	}
@@ -146,15 +149,16 @@ public class RelVisitor implements Visitor{
 		while(rCursor.hasNext()) {//generate projection clause
 			rCurrent = rCursor.next();
 			if (rCurrent instanceof AllResultColumn) {
-				tmp = arg.getSchema().getAllColumnNamesByTable(((AllResultColumn) rCurrent).getTableName());
+				tmp = arg.getSchema().getAllColumnNamesByTable(((AllResultColumn) rCurrent).getFullTableName());
+				System.out.println("tmp: " + ((AllResultColumn) rCurrent).getFullTableName());
 				for(int i = 0; i < tmp.length; i++) {
-					rTables.add(((AllResultColumn) rCurrent).getTableName());
+					rTables.add(((AllResultColumn) rCurrent).getFullTableName());
 				}
+			} else {
+				rTables.add(rCurrent.getExpression().getTableName());
+				rColumns.add(rCurrent.getExpression().getColumnName());
 			}
-			rTables.add(rCurrent.getExpression().getTableName());
-			rColumns.add(rCurrent.getExpression().getColumnName());
 		}
-		
 
 		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
 		node.getResultColumns().accept(this);
@@ -170,15 +174,22 @@ public class RelVisitor implements Visitor{
 		return result;
 	}
 	
+	public Visitable visit(OrNode node) throws StandardException {
+		Predicate left = (Predicate) node.getLeftOperand().accept(this);
+		Predicate right = (Predicate) node.getRightOperand().accept(this);
+		Predicate result = new Or(left, right);
+		return result;
+	}
+	
 	public Visitable visit(BinaryRelationalOperatorNode node) throws StandardException {
 		int opType = node.getOperatorType();
 		Visitable res = null;
 		if(opType == BinaryRelationalOperatorNode.EQUALS_RELOP) res = new Equals((Extractor) node.getLeftOperand().accept(this), (Extractor) node.getRightOperand().accept(this));
-		else if(opType == BinaryRelationalOperatorNode.NOT_EQUALS_RELOP);
-		else if(opType == BinaryRelationalOperatorNode.GREATER_THAN_RELOP);
-		else if(opType == BinaryRelationalOperatorNode.LESS_THAN_RELOP);
-		else if(opType == BinaryRelationalOperatorNode.GREATER_EQUALS_RELOP);
-		else if(opType == BinaryRelationalOperatorNode.LESS_EQUALS_RELOP);
+		else if(opType == BinaryRelationalOperatorNode.NOT_EQUALS_RELOP) res = new NotEquals((Extractor) node.getLeftOperand().accept(this), (Extractor) node.getRightOperand().accept(this));
+		else if(opType == BinaryRelationalOperatorNode.GREATER_THAN_RELOP) res = new Greater((Extractor) node.getLeftOperand().accept(this), (Extractor) node.getRightOperand().accept(this));
+		else if(opType == BinaryRelationalOperatorNode.LESS_THAN_RELOP) res = new Less((Extractor) node.getLeftOperand().accept(this), (Extractor) node.getRightOperand().accept(this));
+		else if(opType == BinaryRelationalOperatorNode.GREATER_EQUALS_RELOP) res = new GreaterEquals((Extractor) node.getLeftOperand().accept(this), (Extractor) node.getRightOperand().accept(this));
+		else if(opType == BinaryRelationalOperatorNode.LESS_EQUALS_RELOP) res = new LessEquals((Extractor) node.getLeftOperand().accept(this), (Extractor) node.getRightOperand().accept(this));
 		else if(opType == BinaryRelationalOperatorNode.IS_NULL_RELOP);
 		else if(opType == BinaryRelationalOperatorNode.IS_NOT_NULL_RELOP);
 		return res;
