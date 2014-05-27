@@ -23,6 +23,8 @@ public class SQLTest {
 	private String arg="SELECT Person.* FROM Person WHERE PersonID = 1 AND surname NOT IN (SELECT surname FROM Person)";
 	//private String arg="SELECT Person.* FROM Person";
 
+	//private String arg="SELECT per.* FROM Person per WHERE per.SurName NOT IN (SELECT SurName from Person per)";
+
 	public SQLTest() throws StandardException, IOException {
 		parser = new SQLParser();
 		node = parser.parseStatement(arg);
@@ -34,7 +36,6 @@ public class SQLTest {
 		System.out.println("Next: " + op.moveNext());
 		op.printTree(0);
 		System.out.println("Tuple: " + op.current());
-
 	}
 	
 	public static void main(String[] args) throws StandardException, IOException {
