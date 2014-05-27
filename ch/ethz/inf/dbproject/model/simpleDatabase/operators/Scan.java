@@ -31,7 +31,7 @@ public class Scan extends Operator {
 	private final String fileName;
 	private final String tableName;
 	private byte[] buffer;
-	private final String DBPATH = "/home/mlei/workspace/database/";
+	private final String DBPATH = "/home/andi/Documents/DMDB/";
 	private final String EXTENSION = ".txt";
 	private int offset;
 	
@@ -125,7 +125,12 @@ public class Scan extends Operator {
 			throw new RuntimeException("could not find file " + fileName);
 		}
 		this.reader = reader;
-		this.tableName = correlation;
+		if (correlation == null || correlation.equals("")){
+			this.tableName = tableName;
+		}
+		else{
+			this.tableName = correlation;
+		}
 		this.buffer = new byte[blocksize];
 		// create schema
 		String[] columnNames;

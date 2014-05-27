@@ -29,7 +29,7 @@ public class Tuple {
 	}
 	
 	public final String get(final String column, final String table){
-		int index = this.getSchema().getIndex(column, table);
+		int index = this.schema.getIndex(column, table);
 		//System.out.println(column + " " + table + " " + index + " " + values[index] + " " + schema.getType(index));
 		return this.values[index];
 	}

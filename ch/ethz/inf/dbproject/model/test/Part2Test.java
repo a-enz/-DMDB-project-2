@@ -32,7 +32,7 @@ public class Part2Test {
 	public void testScan() throws IOException {
 		//Operator op = new Scan(new StringReader(Case));
 		System.out.println("----------testScan--------");
-		Operator op = new Scan("cases.txt");
+		Operator op = new Scan("cases");
 		String expected = "1,Daniel,bli,1 2,Mathias,blo,2 3,Andi,ble,3";
 		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
@@ -54,7 +54,7 @@ public class Part2Test {
 	@Test
 	public void testProjectByName() throws IOException {
 		System.out.println("----------testProjectByName--------");
-		Operator op = new Project(new Scan("cases.txt"), "name", "cases");
+		Operator op = new Project(new Scan("cases"), "CaseNr", "cases");
 		String expected = "Daniel Mathias Andi";
 		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
@@ -65,9 +65,9 @@ public class Part2Test {
 	@Test
 	public void testProjectByIdStatus() throws IOException {
 		System.out.println("----------testProjectByIdStatus--------");
-		String[] columns = new String[] { "name", "field3" };
+		String[] columns = new String[] { "CaseNr", "Location" };
 		String[] tables = new String[] { "cases", "cases"};
-		Operator op = new Project(new Scan("cases.txt"), columns, tables);
+		Operator op = new Project(new Scan("cases"), columns, tables);
 		String expected = "Daniel,1 Mathias,2 Andi,3";
 		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
@@ -89,10 +89,11 @@ public class Part2Test {
 	@Test
 	public void testCross() throws IOException{
 		System.out.println("----------testCross--------");
-		Operator op = new Cross(new Scan("cases.txt"), new Scan("cases.txt"));
-		String expected= 	"1,Daniel,bli,1,1,Daniel,bli,1 1,Daniel,bli,1,2,Mathias,blo,2 1,Daniel,bli,1,3,Andi,ble,3 " +
-							"2,Mathias,blo,2,1,Daniel,bli,1 2,Mathias,blo,2,2,Mathias,blo,2 2,Mathias,blo,2,3,Andi,ble,3 " +
-							"3,Andi,ble,3,1,Daniel,bli,1 3,Andi,ble,3,2,Mathias,blo,2 3,Andi,ble,3,3,Andi,ble,3";
+		Operator op = new Cross(new Scan("cases"), new Scan("cases"));
+		String expected= 	"1,Testverbrechen,2014-04-01,St.Gallen,open,2014-04-12,2014-05-13,1,Testverbrechen,2014-04-01,St.Gallen,open,2014-04-12,2014-05-13 " +
+							"1,Testverbrechen,2014-04-01,St.Gallen,open,2014-04-12,2014-05-13,2,Schwerverbrechen,2014-04-26,Bern,open,UNKNOWN,UNKNOWN " +
+							"2,Schwerverbrechen,2014-04-26,Bern,open,UNKNOWN,UNKNOWN,1,Testverbrechen,2014-04-01,St.Gallen,open,2014-04-12,2014-05-13 " +
+							"2,Schwerverbrechen,2014-04-26,Bern,open,UNKNOWN,UNKNOWN,2,Schwerverbrechen,2014-04-26,Bern,open,UNKNOWN,UNKNOWN";
 		String actual = concatTuples(op);
 		System.out.println("=" + expected + "=");
 		System.out.println("=" + actual + "=");
@@ -104,10 +105,24 @@ public class Part2Test {
 		System.out.println("------------testSQLStatement-----------");
 		MyDatabase mdb = new MyDatabase();
 		Statement stmt = mdb.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT FirstName, SurName FROM Person WHERE PersonID = 0");
-		rs.next();
+		ResultSet rs = stmt.executeQuery("SELECT Person.* FROM Person WHERE PersonID = 0");
+		System.out.println(rs.next());
 		System.out.println(rs.getString("firstname"));
 		System.out.println(rs.getString("surname"));
+		System.out.println(rs.next());
+	}
+
+	@Test
+	public void testSqlParser2() throws StandardException, IOException{
+		System.out.println("------------testSQLStatement2-----------");
+		MyDatabase mdb = new MyDatabase();
+		Statement stmt = mdb.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT per.FirstName FROM Person per, Cases ca WHERE per.PersonID = ca.CaseNr");
+		System.out.println(rs.next());
+		System.out.println(rs.getString("firstname"));
+		System.out.println(rs.next());
+		System.out.println(rs.getString("firstname"));
+		System.out.println(rs.next());
 	}
 	
 	@Test
