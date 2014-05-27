@@ -20,7 +20,7 @@ public class SQLTest {
 	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
 
-	private String arg="SELECT Person.* FROM Person WHERE PersonID = 0";
+	private String arg="SELECT Person.* FROM Person WHERE FirstName = 'Daniel'";
 
 
 	public SQLTest() throws StandardException, IOException {
@@ -33,7 +33,6 @@ public class SQLTest {
 		project = (Project) visit;
 		project.printTree(0);
 		System.out.println(project.moveNext());
-
 	}
 	
 	public static void main(String[] args) throws StandardException, IOException {
