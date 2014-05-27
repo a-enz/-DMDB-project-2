@@ -18,7 +18,7 @@ public class NotIn implements Predicate{
 	public NotIn(Operator op) throws IOException {
 		table = new ArrayList<Tuple>();
 		this.op = op;
-		while(op.moveNext()) {
+		while(op.moveNext()) {		//cache it
 			table.add(op.current());
 		}
 	}

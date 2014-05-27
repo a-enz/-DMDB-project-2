@@ -19,6 +19,7 @@ import com.foundationdb.sql.parser.ConstantNode;
 import com.foundationdb.sql.parser.CursorNode;
 import com.foundationdb.sql.parser.DeleteNode;
 import com.foundationdb.sql.parser.FromTable;
+import com.foundationdb.sql.parser.NotNode;
 import com.foundationdb.sql.parser.NumericConstantNode;
 import com.foundationdb.sql.parser.OrNode;
 import com.foundationdb.sql.parser.OrderByColumn;
@@ -26,6 +27,7 @@ import com.foundationdb.sql.parser.OrderByList;
 import com.foundationdb.sql.parser.ResultColumn;
 import com.foundationdb.sql.parser.ResultColumnList;
 import com.foundationdb.sql.parser.SelectNode;
+import com.foundationdb.sql.parser.SubqueryNode;
 import com.foundationdb.sql.parser.UpdateNode;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
@@ -45,6 +47,8 @@ public class RelVisitor implements Visitor{
 		else if(node instanceof BinaryRelationalOperatorNode) return visit((BinaryRelationalOperatorNode) node);
 		else if(node instanceof ColumnReference) return visit((ColumnReference) node);
 		else if(node instanceof ResultColumnList) return visit((ResultColumnList) node);
+		else if(node instanceof SubqueryNode) return visit((SubqueryNode) node);
+		else if(node instanceof NotNode)  {try {return visit((NotNode) node);} catch (IOException e){return null;}}
 		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (FileNotFoundException e){return null;}}
 		else if(node instanceof DeleteNode) {try {return visit((DeleteNode) node);} catch (FileNotFoundException e){return null;}}
 		//else if(node instanceof )
@@ -86,6 +90,14 @@ public class RelVisitor implements Visitor{
 		return update;
 	}
 	
+	public Visitable visit(NotNode node) throws IOException, StandardException {
+		System.out.println("not: " + node.getOperand());
+		return new NotIn((Operator)node.getOperand().accept(this));
+	}
+	
+	public Visitable visit(SubqueryNode node) throws StandardException {
+		return node.getResultSet().accept(this);
+	}
 	
 	public Visitable visit(ColumnReference node) {
 		String table = node.getTableName();
@@ -100,6 +112,7 @@ public class RelVisitor implements Visitor{
 		
 		return new ColumnRef(column, table);
 	}
+
 
 	@Override
 	public Visitable visit(CursorNode node) throws StandardException {
@@ -172,8 +185,13 @@ public class RelVisitor implements Visitor{
 				rColumns.add(rCurrent.getExpression().getColumnName());
 			}
 		}
-		
-		Predicate predicate = (Predicate) node.getWhereClause().accept(this);
+		Visitable where = node.getWhereClause();
+		Predicate predicate;
+		if(where != null) {		
+			predicate = (Predicate) where.accept(this);
+		} else {
+			predicate = new Tautology();
+		}
 		node.getResultColumns().accept(this);
 		Select select = new Select(arg, predicate);
 		System.out.println("Columns: " + rColumns.toString()+ ", Tables: " + rTables.toString());
