@@ -23,7 +23,7 @@ public abstract class Operator implements Visitable, Printable{
 	
 	protected int blocksize = 1024;
 	protected int headerblock = 3;
-	protected String DBPATH = "/home/mlei/workspace/database/";
+	protected String DBPATH = "/home/daniel/Documents/DMDB/";
 	protected final String EXTENSION = ".txt";
 	
 	/**
