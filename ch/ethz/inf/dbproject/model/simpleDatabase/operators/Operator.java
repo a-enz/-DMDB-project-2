@@ -23,6 +23,8 @@ public abstract class Operator implements Visitable, Printable{
 	
 	protected int blocksize = 1024;
 	protected int headerblock = 3;
+	protected String DBPATH = "/home/daniel/Documents/DMDB/";
+	protected final String EXTENSION = ".txt";
 	
 	/**
 	 * Moves forward to the next tuple. The next tuple can be retrieved by a
