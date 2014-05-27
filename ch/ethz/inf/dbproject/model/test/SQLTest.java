@@ -19,7 +19,6 @@ public class SQLTest {
 	//private String arg= "Select PersonID, FirstName, SurName, Street, BirthDate, Nationality, Bounty FROM Person WHERE PersonID=12";
 	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
-
 	//private String arg="SELECT ca.* FROM Cases ca WHERE CaseNr=1 ORDER BY title asc";
 	private String adrg="SELECT Person.* FROM Person WHERE PersonID = 1 AND name NOT IN (SELECT surname FROM Person)";
 
@@ -35,7 +34,7 @@ public class SQLTest {
 		System.out.println("Next: " + op.moveNext());
 		op.printTree(0);
 		System.out.println("Tuple: " + op.current());
-	}
+
 	
 	public static void main(String[] args) throws StandardException, IOException {
 		new SQLTest();
