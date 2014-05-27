@@ -42,7 +42,10 @@ public class In implements Predicate{
 	@Override
 	public void printTree(int depth) {
 		System.out.println(Helper.indent(depth) + "InNode");
+		System.out.println(Helper.indent(depth) + "Operator:");
 		op.printTree(depth + 1);
+		System.out.println(Helper.indent(depth) + "Extractor");
+		ext.printTree(depth + 1);
 	}
 
 }
