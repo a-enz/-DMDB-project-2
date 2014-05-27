@@ -20,8 +20,8 @@ public class SQLTest {
 	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
 	//private String arg="SELECT ca.* FROM Cases ca WHERE CaseNr=1 ORDER BY title asc";
-	private String adrg="SELECT Person.* FROM Person WHERE PersonID = 1 AND name NOT IN (SELECT surname FROM Person)";
-
+	private String arg="SELECT Person.* FROM Person WHERE PersonID = 1 AND surname NOT IN (SELECT surname FROM Person)";
+	//private String arg="SELECT Person.* FROM Person";
 
 	public SQLTest() throws StandardException, IOException {
 		parser = new SQLParser();
@@ -35,6 +35,7 @@ public class SQLTest {
 		op.printTree(0);
 		System.out.println("Tuple: " + op.current());
 
+	}
 	
 	public static void main(String[] args) throws StandardException, IOException {
 		new SQLTest();

@@ -47,7 +47,7 @@ public class RelVisitor implements Visitor{
 		else if(node instanceof BinaryRelationalOperatorNode) return visit((BinaryRelationalOperatorNode) node);
 		else if(node instanceof ColumnReference) return visit((ColumnReference) node);
 		else if(node instanceof ResultColumnList) return visit((ResultColumnList) node);
-		else if(node instanceof SubqueryNode) return visit((SubqueryNode) node);
+		else if(node instanceof SubqueryNode)  {try {return visit((SubqueryNode) node);} catch (Exception e){return null;}}
 		else if(node instanceof NotNode)  {try {return visit((NotNode) node);} catch (IOException e){return null;}}
 		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (FileNotFoundException e){return null;}}
 		else if(node instanceof DeleteNode) {try {return visit((DeleteNode) node);} catch (FileNotFoundException e){return null;}}
@@ -92,11 +92,13 @@ public class RelVisitor implements Visitor{
 	
 	public Visitable visit(NotNode node) throws IOException, StandardException {
 		System.out.println("not: " + node.getOperand());
-		return new NotIn((Operator)node.getOperand().accept(this));
+		//System.out.println(node.);
+		return new Not((Predicate)node.getOperand().accept(this));
 	}
 	
-	public Visitable visit(SubqueryNode node) throws StandardException {
-		return node.getResultSet().accept(this);
+	public Visitable visit(SubqueryNode node) throws StandardException, IOException, ParseException {
+		System.out.println("InNode: " + node.getLeftOperand());
+		return new In((Operator)node.getResultSet().accept(this), (Extractor) node.getLeftOperand().accept(this));
 	}
 	
 	public Visitable visit(ColumnReference node) {
