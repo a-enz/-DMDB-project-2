@@ -21,7 +21,7 @@ public class SQLTest {
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
 
 	//private String arg="SELECT ca.* FROM Cases ca WHERE CaseNr=1 ORDER BY title asc";
-	private String arg="SELECT Person.* FROM Person WHERE PersonID = 1 AND name NOT IN (SELECT surname FROM Person)";
+	private String adrg="SELECT Person.* FROM Person WHERE PersonID = 1 AND name NOT IN (SELECT surname FROM Person)";
 
 
 	public SQLTest() throws StandardException, IOException {
