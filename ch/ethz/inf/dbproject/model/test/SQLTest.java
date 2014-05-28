@@ -19,21 +19,39 @@ public class SQLTest {
 	//private String arg= "Select PersonID, FirstName, SurName, Street, BirthDate, Nationality, Bounty FROM Person WHERE PersonID=12";
 	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
+	//private String arg="SELECT ca.* FROM Cases ca WHERE CaseNr=1 ORDER BY title asc";
+	private String arg="SELECT Person.* FROM Person WHERE PersonID = 1 AND surname NOT IN (SELECT surname FROM Person)";
+	//private String arg="SELECT Person.* FROM Person";
 
+<<<<<<< HEAD
 	//private String arg="SELECT per.* FROM Person per WHERE per.SurName NOT IN (SELECT SurName from Person)";
 	//private String arg = "UPDATE * FROM Person WHERE SurName = 'Andi'";
 	private String arg = "INSERT INTO Person (PersonID, FirstName, SurName, Bounty) VALUES (10, 'Lea', 'AufderMaur', 750)";
 	
+=======
+	//private String arg="SELECT per.* FROM Person per WHERE per.SurName NOT IN (SELECT SurName from Person per)";
+
+>>>>>>> 7d5f93d4870fa217e6e59647458776127c72a242
 	public SQLTest() throws StandardException, IOException {
 		parser = new SQLParser();
 		node = parser.parseStatement(arg);
 		node.treePrint(0);
+<<<<<<< HEAD
 //		visitor = new RelVisitor();
 //		visit = visitor.visit(node);
 //		System.out.println("Class: " + visit.getClass().toString());
 //		Project project = (Project) visit;
 //		project.printTree(0);
 //		System.out.println(project.moveNext());
+=======
+		visitor = new RelVisitor();
+		visit = visitor.visit(node);
+		System.out.println("Class: " + visit.getClass().toString());
+		op = (Operator) visit;
+		System.out.println("Next: " + op.moveNext());
+		op.printTree(0);
+		System.out.println("Tuple: " + op.current());
+>>>>>>> 7d5f93d4870fa217e6e59647458776127c72a242
 	}
 	
 	public static void main(String[] args) throws StandardException, IOException {

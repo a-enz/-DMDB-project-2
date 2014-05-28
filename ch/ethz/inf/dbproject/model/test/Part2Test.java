@@ -26,9 +26,10 @@ import com.foundationdb.sql.parser.parseVisitor;
  * Unit tests for Part 2.
  * @author Martin Hentschel
  */
-public class Part2Test {
-	@Test
 
+public class Part2Test {
+	
+	@Test
 	public void testScan() throws IOException {
 		//Operator op = new Scan(new StringReader(Case));
 		System.out.println("----------testScan--------");
@@ -120,6 +121,7 @@ public class Part2Test {
 		ResultSet rs = stmt.executeQuery("SELECT per.FirstName FROM Person per, Cases ca WHERE per.PersonID = ca.CaseNr");
 		System.out.println(rs.next());
 		System.out.println(rs.getString("firstname"));
+		System.out.println("-------------getPersonById----------------");
 		System.out.println(rs.next());
 		System.out.println(rs.getString("firstname"));
 		System.out.println(rs.next());
@@ -142,7 +144,62 @@ public class Part2Test {
 		System.out.println("=" + actual + "=");
 		assertEquals(expected,actual);
 	}
+	
+	/****************************
+	 * DatastoreInterface Tests *
+	 ****************************/
+	/* Method names are the same as DatastoreInterface method names
+	 * 
+	 */
+	
+	@Test
+	public void testDummy() throws StandardException, IOException {
+		String expected = "";
+		String actual = "";
+		MyDatabase mdb = new MyDatabase();
+		Statement stmt = mdb.createStatement();
+		ResultSet rs = stmt.executeQuery("XXXXXX");
+		if(rs.next()) actual = "";
+		
+		assertEquals(expected, actual);
+	}
 
+	@Test
+	public void getPersonById() throws StandardException, IOException {
+		String[] args = {"4"};
+		//expected
+		String expected = "";
+	
+		
+		//actual
+		String actual = "";
+		MyDatabase mdb = new MyDatabase();
+		Statement stmt = mdb.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT PersonID, FirstName, SurName, Street, BirthDate, Nationality, Bounty FROM Person WHERE PersonID=" + args[0]);
+		if(rs.next()) actual = rs.getString("firstname");
+		
+		assertEquals(expected, actual);
+	}
+	
+	
+	/* Database Structure:
+	 * CaseNote 	(NoteNr,CaseID,Username,Text)
+	 * Cases 		(CaseNr,Title,Date,Location,Status,DateCon,DateEnd)
+	 * Category 	(CatName,Parent,Bounty)
+	 * Connected	(CaseID,PersonID,Reason,Role)
+	 * ContainedIn	(CaseID,CatName)
+	 * PersonNote	(NoteNr,PersonID,Username,Text)
+	 * Person		(PersonID,FirstName,SurName,Street,BirthDate,Bounty,Nationality)
+	 * User			(Username,Passwort,Name)
+	 */
+	
+	
+	@Test
+	public void anyQuery(){
+		String query = "";
+	}
+	
+	
 	/**
 	 * Concatenates all tuples returned by the operator. The tuples are separated
 	 * by a simple space.
@@ -161,5 +218,6 @@ public class Part2Test {
 		buf.deleteCharAt(buf.length() - 1);
 		return buf.toString();
 	}
+	
 }
  

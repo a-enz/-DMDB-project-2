@@ -305,7 +305,6 @@ public class Scan extends Operator {
 	@Override
 	public void printTree(int depth) {
 		System.out.println(Helper.indent(depth) + "ScanNode: " + fileName);
-		
 	}
 
 }

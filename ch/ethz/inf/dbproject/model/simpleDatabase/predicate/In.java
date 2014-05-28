@@ -1,6 +1,7 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.predicate;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
@@ -10,16 +11,18 @@ import com.foundationdb.sql.StandardException;
 import com.foundationdb.sql.parser.Visitable;
 import com.foundationdb.sql.parser.Visitor;
 
-public class NotIn implements Predicate{
+public class In implements Predicate{
 	
-	private ArrayList<Tuple> table;
+	private ArrayList<Value> table;
 	private Operator op;
+	private Extractor ext;
 	
-	public NotIn(Operator op) throws IOException {
-		table = new ArrayList<Tuple>();
+	public In(Operator op, Extractor ext) throws IOException, ParseException {
+		table = new ArrayList<Value>();
 		this.op = op;
+		this.ext = ext;
 		while(op.moveNext()) {		//cache it
-			table.add(op.current());
+			table.add(new Value(op.current().get(0), op.current().getSchema().getType(0)));
 		}
 	}
 	
@@ -32,14 +35,17 @@ public class NotIn implements Predicate{
 
 	@Override
 	public boolean evaluate(Tuple tuple) {
-		return !table.contains(tuple);
+		return table.contains(ext.getValue(tuple));
 	}
 
 
 	@Override
 	public void printTree(int depth) {
-		System.out.println(Helper.indent(depth) + "NotInNode");
+		System.out.println(Helper.indent(depth) + "InNode");
+		System.out.println(Helper.indent(depth) + "Operator:");
 		op.printTree(depth + 1);
+		System.out.println(Helper.indent(depth) + "Extractor");
+		ext.printTree(depth + 1);
 	}
 
 }
