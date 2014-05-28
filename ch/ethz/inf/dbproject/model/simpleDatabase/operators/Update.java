@@ -89,8 +89,8 @@ public final class Update extends Operator implements Execute {
 
 	@Override
 	public void printTree(int depth) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("UpdateNode: Columns: " + Arrays.toString(columns) + ", Value: " + Arrays.toString(values));
+		op.printTree(depth + 1);
 	}
 
 	@Override

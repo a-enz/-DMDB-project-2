@@ -51,7 +51,7 @@ public class RelVisitor implements Visitor{
 		else if(node instanceof ResultColumnList) return visit((ResultColumnList) node);
 		else if(node instanceof SubqueryNode)  {try {return visit((SubqueryNode) node);} catch (Exception e){e.printStackTrace(); return null;}}
 		else if(node instanceof NotNode)  {try {return visit((NotNode) node);} catch (IOException e){e.printStackTrace(); return null;}}
-		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (FileNotFoundException e){e.printStackTrace(); return null;}}
+		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (Exception e){e.printStackTrace(); return null;}}
 		else if(node instanceof DeleteNode) {try {return visit((DeleteNode) node);} catch (Exception e){e.printStackTrace(); return null;}}
 		else if(node instanceof InsertNode) {try {return visit((InsertNode) node);} catch (FileNotFoundException e){return null;} catch (IOException e) {return null;}}
 		//else if(node instanceof )
@@ -106,19 +106,47 @@ public class RelVisitor implements Visitor{
 		return null;
 	}
 	
-	public Visitable visit(UpdateNode node) throws FileNotFoundException, StandardException {
+	public Visitable visit(UpdateNode node) throws StandardException, IOException {
+//		Iterator<ResultColumn> cursor = node.getResultSetNode().getResultColumns().iterator();
+//		System.out.println("Res: " + node.getResultSetNode().getResultColumns().get(0).toString());
+//		Project project = (Project) node.getResultSetNode().accept(this);
+//		ArrayList<String> values = new ArrayList<String>();
+//		
+//		while(cursor.hasNext()) {
+//			String tmp = cursor.next().getExpression().toString();
+//			System.out.println("value: " + tmp);
+//			values.add(tmp);
+//		}
+//		
+//		Update update = new Update(project, project.getSchema().getAllNames(), project.getSchema().getAllTables(), values.toArray(new String[values.size()]));
+//		return update;
+		
 		Iterator<ResultColumn> cursor = node.getResultSetNode().getResultColumns().iterator();
-		Project project = (Project) node.getResultSetNode().accept(this);
 		ArrayList<String> values = new ArrayList<String>();
+		ArrayList<String> columns = new ArrayList<String>();
+		ArrayList<String> tables = new ArrayList<String>();
+		ResultColumn current;
 		
 		while(cursor.hasNext()) {
-			String tmp = cursor.next().getExpression().toString();
-			System.out.println("value: " + tmp);
-			values.add(tmp);
+			current = cursor.next();
+			ConstantNode constant = (ConstantNode) current.getExpression();
+			String column = current.getReference().getColumnName();
+			String table = current.getReference().getTableName();
+			System.out.println("value: " +constant.getValue().toString());
+			System.out.println("column: " + column);
+			System.out.println("table: " + table);
+			values.add(constant.getValue().toString());
+			columns.add(column);
+			tables.add(table);
 		}
 		
-		Update update = new Update(project, project.getSchema().getAllNames(), project.getSchema().getAllTables(), values.toArray(new String[values.size()]));
-		return update;
+		SelectNode selectNode = (SelectNode) node.getResultSetNode();
+		Predicate pred = (Predicate) selectNode.getWhereClause().accept(this);
+		Scan scan = new Scan(selectNode.getFromList().get(0).getOrigTableName().toString());
+		Select select = new Select(scan, pred);
+		
+		return new Update(select, columns.toArray(new String[columns.size()]),  tables.toArray(new String[tables.size()]), values.toArray(new String[values.size()]));
+		
 	}
 	
 	public Visitable visit(NotNode node) throws IOException, StandardException {
