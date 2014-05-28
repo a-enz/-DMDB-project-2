@@ -26,8 +26,8 @@ public class SQLTest {
 
 	//private String arg="SELECT per.* FROM Person per WHERE per.SurName NOT IN (SELECT SurName from Person)";
 	//private String arg = "UPDATE * FROM Person WHERE SurName = 'Andi'";
-	private String arg = "INSERT INTO Person (PersonID, FirstName, SurName, Bounty) VALUES (10, 'Lea', 'AufderMaur', 750)";
-	//private String arg = "UPDATE Person SET surname ='Ente' WHERE firstname = 'Andi'";
+	//private String arg = "INSERT INTO Person (PersonID, FirstName, SurName, Bounty) VALUES (10, 'Lea', 'AufderMaur', 750)";
+	private String arg = "UPDATE Person SET surname ='Ente' WHERE firstname = 'Andi'";
 	//private String arg = "INSERT INTO Person (PersonID, FirstName, SurName, Bounty) VALUES (10, 'Lea', 'AufderMaur', 750)";
 	//private String arg="SELECT per.* FROM Person per WHERE per.SurName NOT IN (SELECT SurName from Person per)";
 	
@@ -39,11 +39,11 @@ public class SQLTest {
 		visit = visitor.visit(node);
 		System.out.println("Class: " + visit.getClass().toString());
 		op = (Operator) visit;
-		System.out.println("Next: " + op.moveNext());
+		//System.out.println("Next: " + op.moveNext());
 		op.printTree(0);
 		//System.out.println("Tuple: " + op.moveNext());
 		System.out.println("Tuple: " + op.current());
-		((Insert) op).doExecute();
+		((Update) op).doUpdate();
 	}
 	
 	public static void main(String[] args) throws StandardException, IOException {

@@ -60,7 +60,8 @@ public final class Update extends Operator implements Execute {
 			int offset = op.getoffset();
 			for (int i=0; i< columns.length; i++){
 				int columnoffset = schema.getOffset(columns[i], tables[i]);
-				reader.write(values[i].getBytes(), offset + columnoffset, schema.getSize(columns[i], tables[i]));
+				reader.seek(offset + columnoffset);
+				reader.write(values[i].getBytes());
 			}
 		}
 	}
