@@ -45,7 +45,7 @@ public final class Update extends Operator implements Execute {
 		this.fileName = op.getFileName();
 		this.values = values;
 		this.schema = op.getSchema();
-		this.reader = new RandomAccessFile(new File(fileName), "rw");
+		this.reader = new RandomAccessFile(new File(DBPATH + fileName), "rw");
 	}
 
 	@Override
@@ -60,6 +60,10 @@ public final class Update extends Operator implements Execute {
 			int offset = op.getoffset();
 			for (int i=0; i< columns.length; i++){
 				int columnoffset = schema.getOffset(columns[i], tables[i]);
+				reader.seek(offset + columnoffset);
+				for (int j = 0; j < schema.getSize(columns[i],tables[i]); j++){
+					reader.write((byte) 0x1b);
+				}
 				reader.seek(offset + columnoffset);
 				reader.write(values[i].getBytes());
 			}
