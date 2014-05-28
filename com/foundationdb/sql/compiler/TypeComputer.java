@@ -686,4 +686,16 @@ public class TypeComputer implements Visitor
         return getTypeCompiler(valueNode.getTypeId());
     }
 
+	@Override
+	public Visitable visit(SelectNode node) throws StandardException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Visitable visit(CursorNode node) throws StandardException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

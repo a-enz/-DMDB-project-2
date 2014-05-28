@@ -73,7 +73,7 @@ public abstract class ValueNode extends QueryTreeNode
             throws StandardException {
         setType(new DataTypeDescriptor(typeId, isNullable, maximumWidth));
     }
-
+   
     /**
      * Set this node's type from type components.
      */

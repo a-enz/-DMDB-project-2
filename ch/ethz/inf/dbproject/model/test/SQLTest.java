@@ -20,20 +20,20 @@ public class SQLTest {
 	//private String arg="SELECT ca.*, Person.name FROM Cases ca, Person WHERE CaseID =11 AND Location = 'Zurich'";
 	//private String arg="SELECT ca.CaseNr, ca.Title, ca.Date, ca.Location, ca.Status, ca.DateCon, DateEnd FROM Cases ca, ContainedIn co WHERE ca.CaseNr =  co.CaseID AND CatName = 'Exhibitionism'";
 
-	private String arg="SELECT per.* FROM Person per WHERE per.SurName NOT IN (SELECT SurName from Person per)";
-
-
+	//private String arg="SELECT per.* FROM Person per WHERE per.SurName NOT IN (SELECT SurName from Person)";
+	//private String arg = "UPDATE * FROM Person WHERE SurName = 'Andi'";
+	private String arg = "INSERT INTO Person (PersonID, FirstName, SurName, Bounty) VALUES (10, 'Lea', 'AufderMaur', 750)";
+	
 	public SQLTest() throws StandardException, IOException {
 		parser = new SQLParser();
 		node = parser.parseStatement(arg);
 		node.treePrint(0);
-		visitor = new RelVisitor();
-		visit = visitor.visit(node);
-		System.out.println("Class: " + visit.getClass().toString());
-		Project project = (Project) visit;
-		project.printTree(0);
-		System.out.println(project.moveNext());
-		System.out.println(project.current().get(1));
+//		visitor = new RelVisitor();
+//		visit = visitor.visit(node);
+//		System.out.println("Class: " + visit.getClass().toString());
+//		Project project = (Project) visit;
+//		project.printTree(0);
+//		System.out.println(project.moveNext());
 	}
 	
 	public static void main(String[] args) throws StandardException, IOException {
