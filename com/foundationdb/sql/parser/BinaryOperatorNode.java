@@ -265,4 +265,6 @@ public class BinaryOperatorNode extends ValueNode
             rightOperand.isEquivalent(other.rightOperand);
     }
 
+
+
 }

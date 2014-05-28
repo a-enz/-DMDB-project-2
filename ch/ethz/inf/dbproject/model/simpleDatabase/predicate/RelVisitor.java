@@ -19,6 +19,7 @@ import com.foundationdb.sql.parser.ConstantNode;
 import com.foundationdb.sql.parser.CursorNode;
 import com.foundationdb.sql.parser.DeleteNode;
 import com.foundationdb.sql.parser.FromTable;
+import com.foundationdb.sql.parser.InsertNode;
 import com.foundationdb.sql.parser.NotNode;
 import com.foundationdb.sql.parser.NumericConstantNode;
 import com.foundationdb.sql.parser.OrNode;
@@ -35,6 +36,7 @@ import com.foundationdb.sql.types.TypeId;
 
 public class RelVisitor implements Visitor{
 	
+	private boolean isDelete;
 	private boolean showNodes = false;
 
 	@Override
@@ -51,7 +53,9 @@ public class RelVisitor implements Visitor{
 		else if(node instanceof NotNode)  {try {return visit((NotNode) node);} catch (IOException e){e.printStackTrace(); return null;}}
 		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (FileNotFoundException e){e.printStackTrace(); return null;}}
 		else if(node instanceof DeleteNode) {try {return visit((DeleteNode) node);} catch (Exception e){e.printStackTrace(); return null;}}
+		else if(node instanceof InsertNode) {try {return visit((InsertNode) node);} catch (FileNotFoundException e){return null;} catch (IOException e) {return null;}}
 		//else if(node instanceof )
+
 		System.out.println("Visit NodeClass: " + node.getClass());
 		return null;
 	}
@@ -74,6 +78,26 @@ public class RelVisitor implements Visitor{
 		
 		Delete delete = new Delete(select);
 		return delete;
+	}
+	
+	public Visitable visit(InsertNode node) throws FileNotFoundException, IOException{
+		String tableName = node.getTargetTableName().getTableName();
+		ResultColumnList columns = node.getTargetColumnList(); //ResultColumn -reference-> columnReference -columnName-> columnName
+		ResultColumnList values = node.getResultSetNode().getResultColumns(); //ResultColumn -expression-> CharConstantNode -value-> Value
+		ArrayList<String> columnInsert = new ArrayList<String>();
+		ArrayList<String> valueInsert = new ArrayList<String>();
+		
+		for (ResultColumn column : columns){
+			columnInsert.add(column.getReference().getColumnName());
+		}
+		
+		for (ResultColumn value : values){
+			ConstantNode constant = (ConstantNode)value.getExpression();
+			valueInsert.add(constant.getValue().toString());
+		}
+		
+		Insert insert = new Insert(new Scan(tableName),columnInsert.toArray(new String[columnInsert.size()]), valueInsert.toArray(new String[valueInsert.size()]));
+		return insert;
 	}
 	
 	public Visitable visit(ResultColumnList node) {
@@ -134,8 +158,6 @@ public class RelVisitor implements Visitor{
 	//magic happens here
 	@Override
 	public Visitable visit(SelectNode node) throws StandardException {
-		
-		System.out.println("SelectNode visited");
 		Iterator<FromTable> cursor = node.getFromList().iterator();
 		Iterator<ResultColumn> rCursor = node.getResultColumns().iterator();
 		ResultColumn rCurrent;

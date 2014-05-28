@@ -24,6 +24,9 @@ public class SQLTest {
 	private String arg="DELETE FROM Person WHERE PersonID = 2";
 	//private String arg="SELECT Person.* FROM Person";
 
+	//private String arg="SELECT per.* FROM Person per WHERE per.SurName NOT IN (SELECT SurName from Person)";
+	//private String arg = "UPDATE * FROM Person WHERE SurName = 'Andi'";
+	//private String arg = "INSERT INTO Person (PersonID, FirstName, SurName, Bounty) VALUES (10, 'Lea', 'AufderMaur', 750)";
 	//private String arg="SELECT per.* FROM Person per WHERE per.SurName NOT IN (SELECT SurName from Person per)";
 
 	public SQLTest() throws StandardException, IOException {
