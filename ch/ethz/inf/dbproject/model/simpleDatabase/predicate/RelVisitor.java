@@ -47,27 +47,31 @@ public class RelVisitor implements Visitor{
 		else if(node instanceof BinaryRelationalOperatorNode) return visit((BinaryRelationalOperatorNode) node);
 		else if(node instanceof ColumnReference) return visit((ColumnReference) node);
 		else if(node instanceof ResultColumnList) return visit((ResultColumnList) node);
-		else if(node instanceof SubqueryNode)  {try {return visit((SubqueryNode) node);} catch (Exception e){return null;}}
-		else if(node instanceof NotNode)  {try {return visit((NotNode) node);} catch (IOException e){return null;}}
-		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (FileNotFoundException e){return null;}}
-		else if(node instanceof DeleteNode) {try {return visit((DeleteNode) node);} catch (FileNotFoundException e){return null;}}
+		else if(node instanceof SubqueryNode)  {try {return visit((SubqueryNode) node);} catch (Exception e){e.printStackTrace(); return null;}}
+		else if(node instanceof NotNode)  {try {return visit((NotNode) node);} catch (IOException e){e.printStackTrace(); return null;}}
+		else if(node instanceof UpdateNode) {try {return visit((UpdateNode) node);} catch (FileNotFoundException e){e.printStackTrace(); return null;}}
+		else if(node instanceof DeleteNode) {try {return visit((DeleteNode) node);} catch (Exception e){e.printStackTrace(); return null;}}
 		//else if(node instanceof )
 		System.out.println("Visit NodeClass: " + node.getClass());
 		return null;
 	}
 	
-	public Visitable visit(DeleteNode node) throws FileNotFoundException, StandardException {
-		Iterator<ResultColumn> cursor = node.getResultSetNode().getResultColumns().iterator();
-		Project project = (Project) node.getResultSetNode().accept(this);
-		ArrayList<String> values = new ArrayList<String>();
+	public Visitable visit(DeleteNode node) throws StandardException, IOException {
+//		Iterator<ResultColumn> cursor = node.getResultSetNode().getResultColumns().iterator();
+//		Project project = (Project) node.getResultSetNode().accept(this);
+//		ArrayList<String> values = new ArrayList<String>();
+//		
+//		while(cursor.hasNext()) {
+//			String tmp = cursor.next().getExpression().toString();
+//			System.out.println("value: " + tmp);
+//			values.add(tmp);
+//		}
 		
-		while(cursor.hasNext()) {
-			String tmp = cursor.next().getExpression().toString();
-			System.out.println("value: " + tmp);
-			values.add(tmp);
-		}
+		SelectNode select = (SelectNode) node.getResultSetNode();
+		Predicate pred = (Predicate) select.getWhereClause().accept(this);
+		Operator op = new Scan(select.getFromList().get(0).getOrigTableName().toString());
 		
-		Delete delete = new Delete(project);
+		Delete delete = new Delete(op);
 		return delete;
 	}
 	
