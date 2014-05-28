@@ -18,7 +18,6 @@ import com.foundationdb.sql.parser.ParameterNode;
 import com.foundationdb.sql.parser.SQLParser;
 import com.foundationdb.sql.parser.StatementNode;
 import com.foundationdb.sql.parser.Visitor;
-import com.foundationdb.sql.parser.parseVisitor;
 
 
 

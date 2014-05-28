@@ -89,11 +89,13 @@ public class RelVisitor implements Visitor{
 		
 		for (ResultColumn column : columns){
 			columnInsert.add(column.getReference().getColumnName());
+			System.out.println("ColumnName: " + column.getReference().getColumnName());
 		}
 		
 		for (ResultColumn value : values){
 			ConstantNode constant = (ConstantNode)value.getExpression();
 			valueInsert.add(constant.getValue().toString());
+			System.out.println("Values: " + constant.getValue().toString());
 		}
 		
 		Insert insert = new Insert(new Scan(tableName),columnInsert.toArray(new String[columnInsert.size()]), valueInsert.toArray(new String[valueInsert.size()]));

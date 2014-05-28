@@ -52,10 +52,13 @@ public class Scan extends Operator {
 		this.reader = reader;
 		this.tableName = tableName;
 		this.buffer = new byte[blocksize];
+		
+		
 		// create schema
 		String[] columnNames;
 		try{
 			reader.read(buffer);
+			System.out.println(buffer.toString());
 			columnNames = parseLine(buffer).split(",");
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column name: " + this.reader + 
@@ -163,8 +166,8 @@ public class Scan extends Operator {
 		} catch (final IOException e){
 			throw new RuntimeException("could not read column type: " + this.reader + 
 					". Error is " + e);
-		}
-
+		}		
+		
 		this.schema = new TupleSchema (columnNames, columnSize, tableNames, columnType);
 	}
 	
