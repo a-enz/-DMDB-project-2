@@ -11,7 +11,7 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
  * Projection in relational algebra. Returns tuples that contain on projected
  * columns. Therefore the new tuples conform to a new schema.
  */
-public final class Delete extends Operator {
+public final class Delete extends Operator implements Execute {
 
 	private final Operator op;
 	private final String fileName;
@@ -73,6 +73,17 @@ public final class Delete extends Operator {
 	@Override
 	public void printTree(int depth) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void doExecute() {
+		try {
+			this.doDelete();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

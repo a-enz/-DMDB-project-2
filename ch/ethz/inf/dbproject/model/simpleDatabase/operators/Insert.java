@@ -11,7 +11,7 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
  * Projection in relational algebra. Returns tuples that contain on projected
  * columns. Therefore the new tuples conform to a new schema.
  */
-public final class Insert extends Operator {
+public final class Insert extends Operator implements Execute {
 	
 	private final String[] columns;
 	private final String table;
@@ -79,6 +79,17 @@ public final class Insert extends Operator {
 	@Override
 	public void printTree(int depth) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void doExecute() {
+		try {
+			this.doInsert();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }
