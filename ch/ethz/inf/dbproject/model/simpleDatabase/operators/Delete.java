@@ -6,6 +6,7 @@ import java.io.*;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Helper;
 
 /**
  * Projection in relational algebra. Returns tuples that contain on projected
@@ -41,6 +42,7 @@ public final class Delete extends Operator {
 	public void doDelete() throws IOException{
 		while(moveNext()){
 			int offset = op.getoffset();
+			//System.out.println();
 			reader.seek(offset);
 			for (int i = 0; i < blocksize; i++){
 				reader.write((byte) 0x1b);
@@ -72,7 +74,8 @@ public final class Delete extends Operator {
 
 	@Override
 	public void printTree(int depth) {
-		// TODO Auto-generated method stub
+		System.out.println(Helper.indent(depth) + "DeleteNode");
+		op.printTree(depth + 1);
 		
 	}
 }

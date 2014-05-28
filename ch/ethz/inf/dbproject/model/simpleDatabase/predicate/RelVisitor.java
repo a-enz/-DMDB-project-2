@@ -66,12 +66,13 @@ public class RelVisitor implements Visitor{
 //			System.out.println("value: " + tmp);
 //			values.add(tmp);
 //		}
+		//System.out.println("Jeeesus");
+		SelectNode selectNode = (SelectNode) node.getResultSetNode();
+		Predicate pred = (Predicate) selectNode.getWhereClause().accept(this);
+		Scan scan = new Scan(selectNode.getFromList().get(0).getOrigTableName().toString());
+		Select select = new Select(scan, pred);
 		
-		SelectNode select = (SelectNode) node.getResultSetNode();
-		Predicate pred = (Predicate) select.getWhereClause().accept(this);
-		Operator op = new Scan(select.getFromList().get(0).getOrigTableName().toString());
-		
-		Delete delete = new Delete(op);
+		Delete delete = new Delete(select);
 		return delete;
 	}
 	

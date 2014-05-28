@@ -38,7 +38,6 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.predicate.Predicate;
 public class Select extends Operator {
 
 	private final Operator op;
-	private String column;
 	private Predicate pred;
 
 	
